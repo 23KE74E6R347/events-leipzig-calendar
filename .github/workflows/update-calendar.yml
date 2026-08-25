@@ -28,7 +28,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Build Calendar
-        run: python scripts/build_calendar.py
+        run: python build_calendar.py
 
       - name: Commit Updated Calendar
         run: |
@@ -36,8 +36,8 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add events-leipzig.ics
           if git diff --cached --quiet; then
-            echo "Calendar unchanged."
+            echo "Calendar Unchanged."
           else
-            git commit -m "Update Leipzig event calendar"
+            git commit -m "Update Leipzig Event Calendar"
             git push
           fi
