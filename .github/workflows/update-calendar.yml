@@ -14,6 +14,7 @@ jobs:
   update:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    
 
     steps:
       - name: Checkout
@@ -28,7 +29,8 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Build Calendar
-        run: python build_calendar.py
+      - name: Build calendar
+        run: timeout 120s python build_calendar.py
 
       - name: Commit Updated Calendar
         run: |
