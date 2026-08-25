@@ -29,7 +29,6 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Build Calendar
-      - name: Build calendar
         run: timeout 120s python build_calendar.py
 
       - name: Commit Updated Calendar
