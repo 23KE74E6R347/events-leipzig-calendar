@@ -2,8 +2,11 @@ name: Update Leipzig Calendar
 
 on:
   workflow_dispatch:
+
   push:
-    branches: [main]
+    branches:
+      - main
+
   schedule:
     - cron: "0 */6 * * *"
 
@@ -13,8 +16,7 @@ permissions:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-    
+    timeout-minutes: 5
 
     steps:
       - name: Checkout
@@ -37,7 +39,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add events-leipzig.ics
           if git diff --cached --quiet; then
-            echo "Calendar Unchanged."
+            echo "Calendar unchanged."
           else
             git commit -m "Update Leipzig Event Calendar"
             git push
