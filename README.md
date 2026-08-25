@@ -33,8 +33,8 @@ Repository must be public for GitHub Free Pages.
 In **Settings** → **Pages** choose:
 
 _Source: **Deploy from a branch**
-- Branch: **main**
-- Folder: **/ (root)**
+_Branch: **main**
+_Folder: **/ (root)**
 
 After Pages is enabled, the subscription URL is:
 
