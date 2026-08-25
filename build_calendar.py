@@ -71,7 +71,8 @@ PLANLOS_RANGE = re.compile(
 #   Leipzig – XonXanXop – Qualm + H.C: Behrendsten
 SP_MONTH = re.compile(
     r"^—+\s*(Januar|Februar|März|April|Mai|Juni|Juli|August|"
-    r"September|Oktober|November|Dezember)\s+(\d{4})\s*—+",
+    r"September|Oktober|November|Dezember)\s+(\d{4})\s*—+"
+    r"(?:\s*\|\s*top\s*↑)?\s*$",
     re.I,
 )
 SP_DATE = re.compile(r"^(\d{1,2})\.(\d{1,2})\.\s*\([^)]+\)$")
