@@ -1,988 +1,272 @@
 BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//Marv//Leipzig Planlos + Sachsenpunk//DE
+PRODID:-//23KE74E6R347//Events Leipzig Calendar//DE
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
-X-WR-CALNAME:Leipzig – Planlos + Sachsenpunk
+X-WR-CALNAME:Events Leipzig Calendar
 X-WR-TIMEZONE:Europe/Berlin
-X-PUBLISHED-TTL:PT6H
+DTSTAMP:20260825T172012
 BEGIN:VEVENT
-UID:2026-08-17-planlos-0-07a57274-549e-53b1-87a0-8e5104342278@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260817T180000
-SUMMARY:Vernissage „Festgehalten. Verschleppt aus Deutschland 1938–1945“
-LOCATION:Ariowitsch-Haus\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+UID:planlos-e8c69847-c451-564f-a1ce-49b7b961517a
+DTSTART;TZID=Europe/Berlin:20260825T183000
+SUMMARY:Antisemitismus im Fußball
+LOCATION:Erich-Zeigner-Haus Zschochersche Str. 21\, Leipzig\, 04229 Rollst
+ uhlgerecht? Unbekannt
+URL:https://www.planlos-leipzig.org/events/antisemitismus-im-fussball/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-08-17-planlos-1-106f9b45-4557-5df1-8241-3933378db132@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260817T190000
-SUMMARY:Auf Spurensuche: NS-Vergangenheit im eigenen Unternehmen
-LOCATION:Pöge-Haus\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-17-planlos-2-569c593c-82ce-50e9-9be3-5235fd4891d2@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260817T190000
-SUMMARY:Time is tight. It’s time to get ready – A report from the U.S.
-LOCATION:Meuterei\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-18-planlos-3-a16d02e7-bde4-5dac-85cc-464a863aadb2@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260818T070000
-SUMMARY:Gemeinsame Anfahrt zum Prozess nach DD
-LOCATION:Rewe am Kreuz\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-19-planlos-4-5bf5c103-6cc0-581d-ae3f-1ec3db944a8c@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260819T210000
-SUMMARY:HÜTTEN SIND FÜR ALLE DA (7CL SOMMERKINO)
-LOCATION:HP7\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-20-planlos-5-f0baf3ba-246e-5820-8625-2ce6afdf3baa@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260820T100000
-SUMMARY:Workshop: Arbeit auf Augenhöhe – Demokratische Entscheidungen gemeinsam gestalten
-LOCATION:Die VILLA\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-21-planlos-6-a40cc2b2-e288-5477-a2ab-00025592acdf@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260821T190000
-SUMMARY:Die extreme Rechte und Menschenfeindlichkeit in der Umweltbildung und im Natursport
-LOCATION:Alte Spitzenfabrik\, Grimma\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-22-planlos-7-bbd2496e-e994-5e16-9a36-6c1bc3e47d3e@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260822T110000
-SUMMARY:Ortsbegehung: Das KZ-Außenlager „Leipzig-Schönau“
-LOCATION:Straßenbahnhaltestelle Parkallee\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-22-planlos-8-6d1a595f-c53d-58a5-a40a-1cc19315e362@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260822T150000
-SUMMARY:Zschocher Calling No. 9
-LOCATION:Schwartzepark Zschocher\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-22-planlos-9-f8878ca0-45b2-5c5f-a6db-972d456abe8e@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260822T210000
-SUMMARY:ARCO (7CL SOMMERKINO)
-LOCATION:HP7\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-25-planlos-10-2a33a593-c9a0-55fb-8e4a-5dd66ddfdd82@merged-leipzig-calendar
+UID:planlos-c662e16c-3b7d-5148-8f12-2b691796fa6f
 DTSTART;TZID=Europe/Berlin:20260825T190000
-SUMMARY:Der technologische Schleier – Anmerkungen zu einem Sprachbild bei Adorno
-LOCATION:Index\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+DTEND;TZID=Europe/Berlin:20260825T231500
+SUMMARY:Der ’technologische Schleier’. Anmerkungen zu einem Sprachbild
+  bei Adorno (KI-Reihe)
+LOCATION:Index Breite Straße 1\, Leipzig Rollstuhlgerecht? Unbekannt
+URL:https://www.planlos-leipzig.org/events/der-technologische-schleier-anm
+ erkungen-zu-einem-sprachbild-bei-adorno-ki-reihe/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-08-25-planlos-11-19f51368-c1f6-5810-ad79-de9ecf85dbe8@merged-leipzig-calendar
+UID:planlos-1ede7138-7c1d-57ce-b279-af5f06a6249e
 DTSTART;TZID=Europe/Berlin:20260825T190000
 SUMMARY:Kino für Alle – Kein Land für Niemand
-LOCATION:Meuterei\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+LOCATION:Meuterei Zollschuppenstraße 1\, Leipzig Rollstuhlgerecht? Unbeka
+ nnt
+URL:https://www.planlos-leipzig.org/events/kino-fuer-alle-kein-land-fuer-n
+ iemand/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-08-25-planlos-12-f1bd524f-abba-5e25-8794-ae5d27c844ca@merged-leipzig-calendar
+UID:planlos-23a709ea-e037-537c-b7fd-e8b3a1e23c55
 DTSTART;TZID=Europe/Berlin:20260825T190000
-SUMMARY:OAT im August: Situation in Sachsen-Anhalt – Wie kann Unterstützung aussehen?
-LOCATION:Conne Island\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+SUMMARY:OAT im August: Situation in Sachsen-Anhalt – Wie kann Unterstüt
+ zung aussehen?
+LOCATION:Conne Island Koburger Str. 3\, Leipzig\, 04277 Rollstuhlgerecht? 
+ Unbekannt
+URL:https://www.planlos-leipzig.org/events/oat-im-august-situation-in-sach
+ sen-anhalt-wie-kann-unterstuetzung-aussehen/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-08-26-planlos-13-db4f2109-5292-570c-b823-f871c53be192@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20260826
-DTEND;VALUE=DATE:20260827
+UID:planlos-2f5be651-7065-5f77-aee4-441a23794297
+DTSTART;TZID=Europe/Berlin:20260826T150000
 SUMMARY:Herrschaftskritisches Sommercamp 2026
-LOCATION:TBD\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+URL:https://www.planlos-leipzig.org/events/herrschaftskritisches-sommercam
+ p-2026/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-08-26-planlos-14-0a17366a-46a0-5fc0-8902-3b83c308ad33@merged-leipzig-calendar
+UID:planlos-9a2d6067-c129-5f90-abf6-228a94baab56
+DTSTART;TZID=Europe/Berlin:20260826T160000
+DTEND;TZID=Europe/Berlin:20260826T180000
+SUMMARY:Lesung: Extremwetterlagen. Reportagen aus einem neuen Deutschland.
+LOCATION:Kultur- und Bürger*innenzentrum D5 Domplatz 5\, Wurzen Rollstuhl
+ gerecht? Ja
+URL:https://www.planlos-leipzig.org/events/lesung-extremwetterlagen-report
+ agen-aus-einem-neuen-deutschland/
+END:VEVENT
+BEGIN:VEVENT
+UID:planlos-4e53c9dc-b624-5ea1-926e-477cfbf6753d
 DTSTART;TZID=Europe/Berlin:20260826T170000
-SUMMARY:Girls don't cry
-LOCATION:Kinobar Prager Frühling\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+SUMMARY:Girls don’t cry
+LOCATION:Kinobar Prager Frühling Bernhard-Göring-Straße 152\, Leipzig R
+ ollstuhlgerecht? Unbekannt
+URL:https://www.planlos-leipzig.org/events/girls-dont-cry/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-08-27-planlos-15-1b2679ac-e05e-53de-962f-30c1893eb8ed@merged-leipzig-calendar
+UID:planlos-7dbb62af-cd1a-56b9-a584-3d5dba08978a
+DTSTART;TZID=Europe/Berlin:20260826T190000
+DTEND;TZID=Europe/Berlin:20260826T203000
+SUMMARY:Seebrücke Offenes Plenum
+LOCATION:Libelle Kolonnadenstraße 19\, Leipzig Rollstuhlgerecht? Unbekann
+ t
+URL:https://www.planlos-leipzig.org/events/seebruecke-offenes-plenum-4/
+END:VEVENT
+BEGIN:VEVENT
+UID:planlos-a40f4014-72fd-50ea-a365-dbe57949d538
 DTSTART;TZID=Europe/Berlin:20260827T153000
+DTEND;TZID=Europe/Berlin:20260827T183000
 SUMMARY:Kostenfreier Basis-Workshop Konfliktbearbeitung
-LOCATION:Stadtteilhaus Ihmelstraße\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+LOCATION:Stadtteilhaus Ihmelstraße Wurzner Str. 70\, Leipzig Rollstuhlger
+ echt? Unbekannt
+URL:https://www.planlos-leipzig.org/events/kostenfreier-basis-workshop-kon
+ fliktbearbeitung/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-08-27-planlos-16-0038b739-b85f-5846-ba8e-801871b32ccb@merged-leipzig-calendar
+UID:planlos-c2f9d0ca-4cb6-547b-9ce9-fbd9c1c4bbe0
 DTSTART;TZID=Europe/Berlin:20260827T170000
 SUMMARY:Weggefährtinnen erinnern.
-LOCATION:Frauenkultur Leipzig\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+LOCATION:Frauenkultur Leipzig Windscheidstr. 51\, Leipzig\, 04277 Rollstuh
+ lgerecht? Unbekannt
+URL:https://www.planlos-leipzig.org/events/weggefaehrtinnen-erinnern/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-08-27-planlos-17-6d730571-5051-535c-828c-927a0cbf33ee@merged-leipzig-calendar
+UID:planlos-c3b0ef66-e1b0-5058-8a4c-55e30ce9e1a6
 DTSTART;TZID=Europe/Berlin:20260827T190000
-SUMMARY:Film & Gespräch: Staatsschutz
-LOCATION:Passage Kinos\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+DTEND;TZID=Europe/Berlin:20260827T210000
+SUMMARY:Antifa Bleiben! Info-Veranstaltung zur Vorabenddemo am 05.09. in H
+ alle
+LOCATION:Plaque Industriestraße 101\, Leipzig Rollstuhlgerecht? Unbekannt
+URL:https://www.planlos-leipzig.org/events/antifa-bleiben-info-veranstaltu
+ ng-zur-vorabenddemo-am-05-09-in-halle/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-08-28-planlos-18-cc03d5af-111f-5838-b79a-43091030c048@merged-leipzig-calendar
+UID:planlos-b9904a55-13c3-5c11-89ac-90a42a2af242
+DTSTART;TZID=Europe/Berlin:20260827T190000
+DTEND;TZID=Europe/Berlin:20260827T210000
+SUMMARY:Film & Gespräch: Staatsschutz
+LOCATION:Passage Kinos Hainstraße 19a\, Leipzig\, 04109 Rollstuhlgerecht?
+  Unbekannt
+URL:https://www.planlos-leipzig.org/events/film-gespraech-staatsschutz/
+END:VEVENT
+BEGIN:VEVENT
+UID:planlos-5a5cc2ac-2f98-5b2c-8547-c56b141a8957
 DTSTART;TZID=Europe/Berlin:20260828T150000
 SUMMARY::gegen:kultur: – Soli für die G16
-LOCATION:Conne Island\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+LOCATION:Conne Island Koburger Str. 3\, Leipzig\, 04277 Rollstuhlgerecht? 
+ Unbekannt
+URL:https://www.planlos-leipzig.org/events/gegenkultur-soli-fuer-die-g16/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-08-28-planlos-19-de696b9d-80a4-52f7-909c-f29c5ecc8458@merged-leipzig-calendar
+UID:planlos-12765a09-ee8a-572d-93e6-f86f1d46a088
 DTSTART;TZID=Europe/Berlin:20260828T170000
+DTEND;TZID=Europe/Berlin:20260828T180000
+SUMMARY:Antifa Bingo
+LOCATION:Conne Island Koburger Str. 3\, Leipzig\, 04277 Raum: Freisitz Rol
+ lstuhlgerecht? Ja
+URL:https://www.planlos-leipzig.org/events/antifa-bingo/
+END:VEVENT
+BEGIN:VEVENT
+UID:planlos-ec7eb65c-63bc-54ad-9cfe-85cdd317a4d6
+DTSTART;TZID=Europe/Berlin:20260828T170000
+DTEND;TZID=Europe/Berlin:20260828T200000
 SUMMARY:Enough! Genug vom Patriarchat in den Köpfen
-LOCATION:Frauenkultur Leipzig\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+LOCATION:Frauenkultur Leipzig Windscheidstr. 51\, Leipzig\, 04277 Rollstuh
+ lgerecht? Unbekannt
+URL:https://www.planlos-leipzig.org/events/enough-genug-vom-patriarchat-in
+ -den-koepfen/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-08-29-planlos-20-910303ba-787d-5823-98fd-658f47f2d49d@merged-leipzig-calendar
+UID:planlos-121af7ae-f8a6-5b34-8c25-062ee91c4537
 DTSTART;TZID=Europe/Berlin:20260829T110000
+DTEND;TZID=Europe/Berlin:20260829T123000
 SUMMARY:Stadtteilrundgang: NS-Zwangsarbeit in Schönefeld
-LOCATION:Mariannenpark\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+LOCATION:Ecke Rohrteichstraße/ Schönefelder Allee (Eingang Mariannenpark
+ ) Leipzig\, Leipzig Rollstuhlgerecht? Ja
+URL:https://www.planlos-leipzig.org/events/stadtteilrundgang-ns-zwangsarbe
+ it-in-schoenefeld-20/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-08-29-planlos-21-6e46f8ec-3ace-5d8b-8ba8-b8b4cfe231e6@merged-leipzig-calendar
+UID:planlos-eef16b86-3a9a-5869-8dda-18606f033fd4
 DTSTART;TZID=Europe/Berlin:20260829T110000
-SUMMARY:Themenrundgang zur Geschichte der Venerologischen Station Leipzig-Thonberg
-LOCATION:Riebeckstraße 63\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+DTEND;TZID=Europe/Berlin:20260829T123000
+SUMMARY:Themenrundgang mit Zeitzeuginnengespräch zur Geschichte der Vener
+ ologischen Station Leipzig-Thonberg
+LOCATION:Riebeckstraße 63 Riebeckstraße 63\, Leipzig Rollstuhlgerecht? J
+ a
+URL:https://www.planlos-leipzig.org/events/themenrundgang-mit-zeitzeuginne
+ ngespraech-zur-geschichte-der-venerologischen-station-leipzig-thonberg/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-08-31-planlos-22-116c38da-6f51-576b-a7b3-89cedb4c1f16@merged-leipzig-calendar
+UID:planlos-68119a04-be70-50c9-9c57-499d5f855fa6
 DTSTART;TZID=Europe/Berlin:20260831T190000
+DTEND;TZID=Europe/Berlin:20260831T220000
 SUMMARY:Ghost in the Machine (Film & Gespräch)
-LOCATION:Cineding\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+LOCATION:Cineding Karl-Heine-Straße 83\, Leipzig Rollstuhlgerecht? Unbeka
+ nnt
+URL:https://www.planlos-leipzig.org/events/ghost-in-the-machine-film-gespr
+ aech/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-09-01-planlos-23-1d890471-5179-5def-9a3b-72199011bd14@merged-leipzig-calendar
+UID:planlos-b010eec3-075e-5985-a883-0b092054dca3
 DTSTART;TZID=Europe/Berlin:20260901T190000
+DTEND;TZID=Europe/Berlin:20260901T210000
 SUMMARY:Tote auf Urlaub. Berlin 1919
-LOCATION:Erich-Zeigner-Haus\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+LOCATION:Erich-Zeigner-Haus Zschochersche Str. 21\, Leipzig\, 04229 Rollst
+ uhlgerecht? Ja
+URL:https://www.planlos-leipzig.org/events/tote-auf-urlaub-berlin-1919/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-09-02-planlos-24-d8a6479e-0bf3-5347-911d-c83e5f81c787@merged-leipzig-calendar
+UID:planlos-02aac1a5-ec01-5156-b7a8-63582f217394
 DTSTART;TZID=Europe/Berlin:20260902T190000
-SUMMARY:Vorstellungsvortrag die Plattform – Plattformismus und Especifismo
-LOCATION:Pöge-Haus\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+DTEND;TZID=Europe/Berlin:20260902T210000
+SUMMARY:Vorstellungsvortrag die Plattform – Was sind Plattformismus und 
+ Especifismo?
+LOCATION:Pöge-Haus Hedwigstraße 20\, Leipzig Rollstuhlgerecht? Nein
+URL:https://www.planlos-leipzig.org/events/vorstellungsvortrag-die-plattfo
+ rm-was-sind-plattformismus-und-especifismo/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-09-03-planlos-25-612e1753-69d6-543a-b1d8-0e23869c4d7e@merged-leipzig-calendar
+UID:planlos-a70118b8-5d37-5ea8-87ba-d615ee2c60df
 DTSTART;TZID=Europe/Berlin:20260903T100000
-SUMMARY:Workshop: Demokratische Visionen – Mit klarer Haltung für gesellschaftlichen Wandel
-LOCATION:Pöge-Haus\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+DTEND;TZID=Europe/Berlin:20260903T163000
+SUMMARY:Workshop: Demokratische Visionen – Mit klarer Haltung für gesel
+ lschaftlichen Wandel
+LOCATION:Pöge-Haus Hedwigstraße 20\, Leipzig Rollstuhlgerecht? Ja
+URL:https://www.planlos-leipzig.org/events/workshop-demokratische-visionen
+ -mit-klarer-haltung-fuer-gesellschaftlichen-wandel/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-09-05-planlos-26-40fa2540-cf3d-5ab4-8455-7fe5855a9bed@merged-leipzig-calendar
+UID:planlos-06b0f9c0-e117-5e89-a1f1-dbaf6ab4666d
+DTSTART;TZID=Europe/Berlin:20260904T190000
+SUMMARY:THESE GIRLS FOREVER! – Ikonen feministischer Musikgeschichte (Bu
+ chrelease)
+LOCATION:Conne Island Koburger Str. 3\, Leipzig\, 04277 Rollstuhlgerecht? 
+ Unbekannt
+URL:https://www.planlos-leipzig.org/events/these-girls-forever-ikonen-femi
+ nistischer-musikgeschichte-buchrelease/
+END:VEVENT
+BEGIN:VEVENT
+UID:planlos-cade2cf9-576d-58e7-8547-2b513fad4c07
+DTSTART;TZID=Europe/Berlin:20260904T200000
+DTEND;TZID=Europe/Berlin:20260904T220000
+SUMMARY:Rausch ist politisch?! Doppelbuchpremiere mit Georg Schomerus und 
+ Robert Feustel
+LOCATION:El Libro Bornaische Straße 3d\, Leipzig Rollstuhlgerecht? Unbeka
+ nnt
+URL:https://www.planlos-leipzig.org/events/rausch-ist-politisch-doppelbuch
+ premiere-mit-georg-schomerus-und-robert-feustel/
+END:VEVENT
+BEGIN:VEVENT
+UID:planlos-9c70094c-09d8-588a-8028-6cee28249191
 DTSTART;TZID=Europe/Berlin:20260905T100000
-SUMMARY:Schreiben fürs Hören – lebendige Texte fürs Radio
-LOCATION:Radio Blau\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+DTEND;TZID=Europe/Berlin:20260905T160000
+SUMMARY:Schreiben fürs Hören – lebendige Texte fürs Radio schreiben m
+ it Kit (für Frauen und TIAN*-Personen ab 55Jahren)
+LOCATION:Radio Blau Paul-Gruner-Str. 62\, 04229 Leipzig Rollstuhlgerecht? 
+ Ja
+URL:https://www.planlos-leipzig.org/events/schreiben-fuers-hoeren-lebendig
+ e-texte-fuers-radio-schreiben-mit-kit-fuer-frauen-und-tian-personen-ab-55
+ jahren/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-09-05-planlos-27-14ed16cc-94f1-5782-b4ce-ea9ae09d3546@merged-leipzig-calendar
+UID:planlos-c7ba68c6-e8de-57c0-86da-86814c643d6f
 DTSTART;TZID=Europe/Berlin:20260905T154500
-SUMMARY:Gemeinsame Zuganreise nach Halle – Antifa-Demo
-LOCATION:Hauptbahnhof\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
+DTEND;TZID=Europe/Berlin:20260905T210000
+SUMMARY:Gemeinsame Zuganreise nach Halle • Auf zur Antifa-Demo am Vorabe
+ nd der Wahl in LSA
+LOCATION:Hauptbahnhof Willy-Brandt-Platz\, Leipzig Rollstuhlgerecht? Unbek
+ annt
+URL:https://www.planlos-leipzig.org/events/gemeinsame-zuganreise-nach-hall
+ e-auf-zur-antifa-demo-am-vorabend-der-wahl-in-lsa/
 END:VEVENT
 BEGIN:VEVENT
-UID:2026-09-08-planlos-28-aab88808-67ed-55b5-a9e5-1472f3ae5f68@merged-leipzig-calendar
+UID:planlos-ed5bd856-58d2-5bc0-8130-e79f72ce78cb
+DTSTART;TZID=Europe/Berlin:20260906T130000
+DTEND;TZID=Europe/Berlin:20260906T210000
+SUMMARY:Love Hardcore\, Hate Antisemitism II – Punk-Matinee in der Skate
+ bowl
+LOCATION:Conne Island Koburger Str. 3\, Leipzig\, 04277 Raum: Skate Bowl R
+ ollstuhlgerecht? Unbekannt
+URL:https://www.planlos-leipzig.org/events/love-hardcore-hate-antisemitism
+ -ii-punk-matinee-in-der-skatebowl/
+END:VEVENT
+BEGIN:VEVENT
+UID:planlos-8fe894bf-af62-5b90-a336-7618adb4aea4
 DTSTART;TZID=Europe/Berlin:20260908T190000
-SUMMARY:Ü30 Antifa Vernetzungstreffen
-LOCATION:Conne Island\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-09-planlos-29-7c8ae0a8-4c0d-5de0-8dac-5bb67c461160@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260909T190000
-SUMMARY:Fotoausstellung „Der Kater heißt Filja“
-LOCATION:Galerie KUB\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-10-planlos-30-bb26d33e-bdeb-56c8-9d8f-414ae4407a38@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260910T183000
-SUMMARY:Neuer Lesezyklus: Angela Y. Davis
-LOCATION:translib\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-10-planlos-31-5b059b6d-c2a8-580e-9353-12ee2b52d346@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260910T190000
-SUMMARY:Gespräch: Was bleibt. Familien erinnern an NS-Zwangsarbeit
-LOCATION:Galerie KUB\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-12-planlos-32-8e80d86c-7c9f-520f-9788-cff3a3afb508@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260912T110000
-SUMMARY:Stadtteilrundgang: NS-Zwangarbeit in Volkmarsdorf
-LOCATION:Neustädter Markt\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-12-planlos-33-a6d67e33-7804-53f0-b31c-a6c7d553315e@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260912T130000
-SUMMARY:„Antifa\, ja klar!“ – Zur Faschisierung in Deutschland
-LOCATION:Galerie KUB\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-12-planlos-34-5dae4ec6-0761-55a2-9bbe-3367b775d54a@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260912T140000
-SUMMARY:Öffentliche Führung durch die Gedenkstätte für Zwangsarbeit Leipzig
-LOCATION:Gedenkstätte für Zwangsarbeit\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-13-planlos-35-33da5f89-1d83-5b76-bae6-3594c3445ede@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260913T180000
-SUMMARY:Klassenkampf: Zaubermittel gegen Faschismus?
-LOCATION:Axaxi\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-17-planlos-36-61b2b357-9a26-5657-9a57-a31c73b00988@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260917T100000
-SUMMARY:Workshop: Konfliktkultur entwickeln
-LOCATION:KulturGut Schönefeld\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-18-planlos-37-c43fece3-7251-5e91-8eaa-1c6b3480d66c@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260918T160000
-SUMMARY:5 JAHRE BLOCKPARTY LÖßNIG!
-LOCATION:Johannes-R.-Becher-Platz\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-19-planlos-38-c840e355-81e7-507b-863c-6282f802b5a5@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260919T110000
-SUMMARY:Stadtteilrundgang: NS-Zwangsarbeit in Connewitz
-LOCATION:Werk2\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-19-planlos-39-a0b565c7-ca99-5649-9638-9b4ffa9332fe@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260919T110000
-SUMMARY:Stadtteilrundgang: NS-Zwangsarbeit in der Leipziger Innenstadt
-LOCATION:Augustusplatz\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-19-planlos-40-16a5806a-fba5-5c8a-b9d6-d646f62cd213@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260919T150000
-SUMMARY:Zwischen Liebe und Überforderung – Mutterschaft ehrlich betrachten
-LOCATION:Frauenkultur Leipzig\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-21-planlos-41-ac4898a8-f3e8-5a88-bb61-39f8b204beae@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260921T190000
-SUMMARY:Libertarismus – Machtausübung durch Fortschrittserzählungen
-LOCATION:Conne Island\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-24-planlos-42-1807a51b-102f-5d02-a3d3-a2d12dc44162@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260924T153000
-SUMMARY:Kostenfreier Basis-Workshop Konfliktbearbeitung
-LOCATION:MakerSpace Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-24-planlos-43-a2246b50-b66c-539f-a188-d71d6424dc3c@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260924T181500
-SUMMARY:STAATSSCHUTZ
-LOCATION:cinémathèque\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-24-planlos-44-51a0888c-a448-5a1f-a8ae-c150ac225486@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260924T183000
-SUMMARY:Betroffene von Beziehungsgewalt unterstützen
-LOCATION:Conne Island\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-24-planlos-45-8efcbec9-1410-5955-88a5-1f7b561e9816@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260924T190000
-SUMMARY:Tödliche Gewalt gegen wohnungslose Menschen
-LOCATION:Stadtbibliothek Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-24-planlos-46-8792d342-619d-5847-9d91-bf8ef257f98e@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260924T210000
-SUMMARY:THE BEAUTY OF BALLROOM
-LOCATION:cinémathèque\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-25-planlos-47-5b9339cd-f320-5831-9cbc-6053ab42a964@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260925T190000
-SUMMARY:Solidarität kollektiv organisieren
-LOCATION:interim\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-26-planlos-48-6d7192d1-a562-5825-a587-087e8ee0b830@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260926T171500
-SUMMARY:THE BEAUTY OF BALLROOM
-LOCATION:cinémathèque\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-26-planlos-49-296c4d91-8eba-5490-918a-07ae89aaffe2@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260926T194500
-SUMMARY:STAATSSCHUTZ
-LOCATION:cinémathèque\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-27-planlos-50-7d3e21db-ae0d-58ae-8f74-62de07515660@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260927T110000
-SUMMARY:Historischer Rundgang auf dem Gelände der ehemaligen Städtischen Arbeitsanstalt
-LOCATION:Riebeckstraße 63\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-27-planlos-51-25a0e21a-b7bb-5e59-a6cb-24be3b2d172e@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260927T161500
-SUMMARY:THE BEAUTY OF BALLROOM
-LOCATION:cinémathèque\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-27-planlos-52-3e59c3cd-2f65-536d-a2ca-66d76c6d4294@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260927T204500
-SUMMARY:STAATSSCHUTZ
-LOCATION:cinémathèque\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-28-planlos-53-32e4bd05-644e-5ccd-acb9-9c22df0f12ae@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260928T190000
-SUMMARY:Buchvorstellung: Digitale Solidarität
-LOCATION:Conne Island\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-28-planlos-54-eef1edaf-9cf0-5c25-a60c-6775275c3091@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260928T190000
-SUMMARY:Digitale Solidarität – Zur Überwindung kapitalistischer Technologie
-LOCATION:Conne Island\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-29-planlos-55-c7ee3651-9210-5b18-b4d9-102a2fd20b23@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260929T190000
-SUMMARY:THE BEAUTY OF BALLROOM
-LOCATION:naTo\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-29-planlos-56-7286b533-cdf9-52da-aa97-a54cabfca53d@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260929T211500
-SUMMARY:STAATSSCHUTZ
-LOCATION:naTo\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-30-planlos-57-299128de-625f-5e7f-966f-f643a028f7bf@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260930T190000
-SUMMARY:THE BEAUTY OF BALLROOM
-LOCATION:naTo\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-30-planlos-58-67fc182d-e085-5800-ac71-7fe48fcd96df@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260930T211500
-SUMMARY:STAATSSCHUTZ
-LOCATION:naTo\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-02-planlos-59-f5d37856-dc51-5db0-b379-39b10972a966@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20261002T100000
-SUMMARY:Workshop: Zwischen Engagement und Erschöpfung
-LOCATION:Heizhaus Grünau\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-08-planlos-60-eab25dba-a0d6-594d-9cb6-6a40c406d48a@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20261008T153000
-SUMMARY:Kostenfreier Basis-Workshop Konfliktbearbeitung
-LOCATION:Heizhaus Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-08-planlos-61-3fb28c2b-9d8f-5fa3-ac9a-b13fe3bbb0cc@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20261008T190000
-SUMMARY:Sächsische Separatisten als Beispiel für Rechtsterrorismus
-LOCATION:interim\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-12-planlos-62-fc33c4bd-7231-54b4-9506-e6854d4d7db4@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261012
-DTEND;VALUE=DATE:20261013
-SUMMARY:Psychiatrie trifft Film: „Nostalghia“
-LOCATION:Passage Kinos\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-19-planlos-63-111aeb14-5d74-5908-8cad-053c0bbd0dd0@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20261019T183000
-SUMMARY:Workshop: Personifizierung gesellschaftlicher Verhältnisse
-LOCATION:Index\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-27-planlos-64-1bb7bd95-3cc5-5126-9e0f-f09725d6b95d@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20261027T190000
-SUMMARY:Rechte Strukturen in und um Leipzig
-LOCATION:Conne Island\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-31-planlos-65-cf2fb3af-2534-5ec3-b6d1-d49460772688@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20261031T110000
-SUMMARY:Historischer Rundgang auf dem Gelände der ehemaligen Städtischen Arbeitsanstalt
-LOCATION:Riebeckstraße 63\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-06-planlos-66-4f984552-5786-5798-8aad-c4c5c6aaec95@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20261106T100000
-SUMMARY:Workshop: Konflikte in der Stadtteilarbeit
-LOCATION:Pöge-Haus\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-12-planlos-67-4de821ce-dd66-5f89-8eee-e3d97a0f1fef@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20261112T100000
-SUMMARY:Workshop: Mit resilienten Strategien durch die Krise
-LOCATION:Pöge-Haus\, Leipzig\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-19-planlos-68-8eea543e-5949-5f22-8b2e-e35c8e7fd823@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20261119T190000
-SUMMARY:Rechte Strukturen in und um Leipzig
-LOCATION:NordWest Stern\, Leipzig Gohlis\, Leipzig
-DESCRIPTION:Quelle: https://www.planlos-leipzig.org
-URL:https://www.planlos-leipzig.org
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-17-sachsenpunk-0-e7cf0f03-80c7-5179-864f-c30d59bc0397@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260817T190000
-SUMMARY:Glacier + Sputnik
-LOCATION:Black Label Pub\, Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-17-sachsenpunk-1-374ea595-7726-5856-a010-4a584db75c7a@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20260817
-DTEND;VALUE=DATE:20260818
-SUMMARY:Teen Mortgage + Cowboy Hunters
-LOCATION:Täubchenthal\, Wachsmuthstraße 1\, 04229 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-18-sachsenpunk-2-b2f6889f-dd3c-5dbf-8a14-3cae083243e0@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260818T200000
-SUMMARY:Leider Geil + Bambi Shoots Back + Kommando Brigitte Speer
-LOCATION:G16\, Gießerstraße 16\, 04229 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-20-sachsenpunk-3-b4cd3294-cd56-579e-9ca4-ac8d9e547d10@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260820T190000
-SUMMARY:Donots + H-Blockx
-LOCATION:Parkbühne im Clara-Zetkin-Park\, Karl-Tauchnitz-Straße 28\, 04107 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-21-sachsenpunk-4-93e6af8c-d8d4-5144-84a7-60fc19156884@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20260821
-DTEND;VALUE=DATE:20260822
-SUMMARY:Elbtalherzen + Hartmut und Freunde
-LOCATION:Kxxl Hxxxa\, Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-21-sachsenpunk-5-8fafa998-50fd-5554-84be-e28cead64b9a@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20260821
-DTEND;VALUE=DATE:20260822
-SUMMARY:Shoreline
-LOCATION:Naumanns\, Zschochersche Straße 82a\, 04229 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-08-21-sachsenpunk-6-537df677-1a82-5ca5-a19d-b43e7a6e4bc2@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20260821T180000
-SUMMARY:Horse drawn carriage + Angry Rhino + Vile + Oath of a Traitor + NESAIA
-LOCATION:TV-Club\, Theresienstraße 2\, 04129 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-27-sachsenpunk-7-7ccfffcd-f732-5e31-8835-bc7952e07d40@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20260927
-DTEND;VALUE=DATE:20260928
-SUMMARY:The SoapGirls
-LOCATION:Conne Island\, Koburger Straße 3\, 04277 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-09-29-sachsenpunk-8-33bb79ac-606c-5140-ba7e-b467865c3fa1@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20260929
-DTEND;VALUE=DATE:20260930
-SUMMARY:Grenzkontrolle
-LOCATION:Moritzbastei\, Kurt-Masur-Straße 1\, 04109 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-01-sachsenpunk-9-e7379e13-1654-555d-af08-99e326a015ff@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261001
-DTEND;VALUE=DATE:20261002
-SUMMARY:Deep Sun + Terra Atlantica + Fatal Arrival
-LOCATION:Bandhaus\, Saarländer Straße 17\, 04179 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-02-sachsenpunk-10-881f9912-1b26-5711-94b4-a923caed43fd@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261002
-DTEND;VALUE=DATE:20261003
-SUMMARY:Swallows Rose + Uli Sailor – Punkrock Piano
-LOCATION:Bandhaus\, Saarländer Straße 17\, 04179 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-02-sachsenpunk-11-00c073b4-35ff-5999-aa63-5b75f636bcea@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261002
-DTEND;VALUE=DATE:20261003
-SUMMARY:Old Thieves
-LOCATION:M.V.B.\, Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-03-sachsenpunk-12-6f653303-62b9-581e-ba1d-4bd944a8a57e@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261003
-DTEND;VALUE=DATE:20261004
-SUMMARY:GrGr + Ursula + Export
-LOCATION:Axxxi\, Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-03-sachsenpunk-13-0e1aece6-44b4-5633-906e-9bb92eee552d@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261003
-DTEND;VALUE=DATE:20261004
-SUMMARY:Hammerkeen
-LOCATION:Bandhaus\, Saarländer Straße 17\, 04179 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-03-sachsenpunk-14-e74ac939-9238-5b17-8dda-49c0f6b474cf@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261003
-DTEND;VALUE=DATE:20261004
-SUMMARY:The Toasters
-LOCATION:Noels Ballroom\, Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-29-sachsenpunk-15-584c152e-30f3-51e5-8b26-2aeb09c20ddd@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261029
-DTEND;VALUE=DATE:20261030
-SUMMARY:Eyehategod
-LOCATION:Naumanns\, Zschochersche Straße 82a\, 04229 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-10-31-sachsenpunk-16-bad7ca62-c52a-5ac4-9e56-e0ca8173cf45@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261031
-DTEND;VALUE=DATE:20261101
-SUMMARY:DŸSE
-LOCATION:Conne Island\, Koburger Straße 3\, 04277 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-02-sachsenpunk-17-50f450db-b957-5bf9-9adf-040a1ceb03de@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261102
-DTEND;VALUE=DATE:20261103
-SUMMARY:Long Distance Calling
-LOCATION:WERK 2 (Halle A)\, Kochstraße 132\, 04277 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-05-sachsenpunk-18-9cccd69b-d10e-5cdb-9297-58529fbafd45@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20261105T180000
-SUMMARY:ERRA + Currents + Caskets + Aviana
-LOCATION:Felsenkeller\, Karl-Heine-Straße 32\, 04229 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-05-sachsenpunk-19-e8b6a55b-f32b-5740-a7d0-37d539c91b74@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261105
-DTEND;VALUE=DATE:20261106
-SUMMARY:Enter Shikari + Holding Absence + The Callous Daoboys
-LOCATION:Haus Auensee\, Gustav-Esche-Straße 4\, 04159 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-05-sachsenpunk-20-5fa07d31-2eac-51f6-a7b4-db020ee6913d@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261105
-DTEND;VALUE=DATE:20261106
-SUMMARY:Our Promise
-LOCATION:Werk 2 (Halle D)\, Kochstraße 132\, 04277 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-06-sachsenpunk-21-61c5ca1c-0ce0-5c5b-9aca-fb70f441a8c9@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261106
-DTEND;VALUE=DATE:20261107
-SUMMARY:Witchrot + ZHAAT
-LOCATION:Polikyl\, Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-06-sachsenpunk-22-b63b3516-785b-5659-81d9-67a48627fa05@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261106
-DTEND;VALUE=DATE:20261107
-SUMMARY:Jozef van Wissem
-LOCATION:UT Connewitz\, Wolfgang-Heinze-Straße 12a\, 04277 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-07-sachsenpunk-23-4d271919-4487-5ec0-9fbd-57a8197365e1@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261107
-DTEND;VALUE=DATE:20261108
-SUMMARY:Echoes of the Factory Vol.2 – Antibody + Unterschicht + Schwarzes Fragment
-LOCATION:Bandhaus\, Saarländer Straße 17\, 04179 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-07-sachsenpunk-24-141005db-449e-5acf-93d2-beaab463b502@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261107
-DTEND;VALUE=DATE:20261108
-SUMMARY:Kommando Schimmelkotze + Hyphen
-LOCATION:Axxxi\, Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-07-sachsenpunk-25-822b5636-7885-52b9-b562-e358d9ddfca2@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261107
-DTEND;VALUE=DATE:20261108
-SUMMARY:Smile and Burn + PLAIINS + The Pill
-LOCATION:Conne Island\, Koburger Straße 3\, 04277 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-07-sachsenpunk-26-62f36bf3-8d36-52fd-aabd-0093c8fa7a81@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261107
-DTEND;VALUE=DATE:20261108
-SUMMARY:Dynamite Skafestival 2026 – The Tennors + The Valkyrians + Rantanplan + Booze & Glory + Arte Bella & The Fellas + RATRACE
-LOCATION:Felsenkeller\, Karl-Heine-Straße 32\, 04229 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-08-sachsenpunk-27-719feb4a-ee43-5357-8668-625ecd71c815@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261108
-DTEND;VALUE=DATE:20261109
-SUMMARY:TesseracT
-LOCATION:Täubchenthal\, Wachsmuthstraße 1\, 04229 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-10-sachsenpunk-28-1a41813b-8168-58d2-b5d3-d1e87a859623@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261110
-DTEND;VALUE=DATE:20261111
-SUMMARY:Any Given Day
-LOCATION:Täubchenthal\, Wachsmuthstraße 1\, 04229 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-11-sachsenpunk-29-d80c49bf-138d-56ab-ab75-ce35cae62d75@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261111
-DTEND;VALUE=DATE:20261112
-SUMMARY:Muff Potter
-LOCATION:Conne Island\, Koburger Straße 3\, 04277 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-11-sachsenpunk-30-b178ff39-1f4c-5fa2-9869-bec982df0cf8@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261111
-DTEND;VALUE=DATE:20261112
-SUMMARY:Bruchbude
-LOCATION:Neues Schauspiel\, Lützner Straße 29\, 04177 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-12-sachsenpunk-31-6dd824e4-57cb-52eb-83e6-6be059cb23bd@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261112
-DTEND;VALUE=DATE:20261113
-SUMMARY:Ultra Sunn + Sydney Valette + Sad Madona
-LOCATION:Moritzbastei\, Kurt-Masur-Straße 1\, 04109 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-13-sachsenpunk-32-25092879-6bbe-5037-8fe4-dc9aae648a26@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261113
-DTEND;VALUE=DATE:20261114
-SUMMARY:The Browning + Within Destruction + Abbie Falls
-LOCATION:Conne Island\, Koburger Straße 3\, 04277 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-13-sachsenpunk-33-c8b4a151-7f24-57f0-9f6d-358236b5507b@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261113
-DTEND;VALUE=DATE:20261114
-SUMMARY:Four Imaginary Boys – The Cure Tribute
-LOCATION:Naumanns\, Zschochersche Straße 82a\, 04229 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-13-sachsenpunk-34-c06ebf54-3ba6-51d6-986a-033eaed2fd30@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261113
-DTEND;VALUE=DATE:20261114
-SUMMARY:Carpenter Brut + HEALTH + VOWWS
-LOCATION:Täubchenthal\, Wachsmuthstraße 1\, 04229 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-28-sachsenpunk-35-7bccf73e-2d70-5295-91cd-d127f27ef9c6@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261128
-DTEND;VALUE=DATE:20261129
-SUMMARY:Hel´s Throne + Empire Of Giants + CoNVeX
-LOCATION:Bandhaus\, Saarländer Straße 17\, 04179 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-28-sachsenpunk-36-bddebe30-b2ba-5eff-b4b0-3cccf996d418@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261128
-DTEND;VALUE=DATE:20261129
-SUMMARY:Perkele + The Sensitives
-LOCATION:Felsenkeller\, Karl-Heine-Straße 32\, 04229 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-28-sachsenpunk-37-6d50355d-d158-5846-96c9-e2746b20045f@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261128
-DTEND;VALUE=DATE:20261129
-SUMMARY:Annisokay
-LOCATION:Haus Auensee\, Gustav-Esche-Straße 4\, 04159 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-28-sachsenpunk-38-2c344456-4876-5b08-850d-414941944f83@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261128
-DTEND;VALUE=DATE:20261129
-SUMMARY:Rising Insane + Pentastone
-LOCATION:Naumanns\, Zschochersche Straße 82a\, 04229 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-28-sachsenpunk-39-251affb9-9215-57cb-8b41-0f1cbe7111ad@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261128
-DTEND;VALUE=DATE:20261129
-SUMMARY:Terror + Bane + Start Today + Peace Of Mind
-LOCATION:Täubchenthal\, Wachsmuthstraße 1\, 04229 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-11-29-sachsenpunk-40-0f8e6441-f512-51c5-b70c-eb9a7043d18b@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261129
-DTEND;VALUE=DATE:20261130
-SUMMARY:Lost In Kyiv + TEARS&DENIAL
-LOCATION:Conne Island\, Koburger Straße 3\, 04277 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-12-05-sachsenpunk-41-b02e9d49-710b-583f-bf61-b0c9585463cd@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261205
-DTEND;VALUE=DATE:20261206
-SUMMARY:New Hate Rising (20 Jahre!) + Hookline + Mein Herz in Flammen + Out of Step
-LOCATION:Bandhaus\, Saarländer Straße 17\, 04179 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-12-05-sachsenpunk-42-7f1e1049-8d63-5ed4-94d5-1800dea57938@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261205
-DTEND;VALUE=DATE:20261206
-SUMMARY:Zebrahead + Teenage Bottlerocket + Punkrock Factory
-LOCATION:Felsenkeller\, Karl-Heine-Straße 32\, 04229 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-12-08-sachsenpunk-43-22084837-a0f7-57fb-857e-6c25b096ad8e@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261208
-DTEND;VALUE=DATE:20261209
-SUMMARY:Green Lung + High On Fire + Gnome
-LOCATION:ANKER\, Renftstraße 1\, 04159 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-12-10-sachsenpunk-44-89210213-9112-53db-b17b-91d69f644ff8@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261210
-DTEND;VALUE=DATE:20261211
-SUMMARY:Indecent Behavior + Friends Don’t Lie
-LOCATION:Bandhaus\, Saarländer Straße 17\, 04179 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-12-11-sachsenpunk-45-280331e2-84a0-54e9-8297-ec74687b1e7c@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20261211T163000
-SUMMARY:Heavy Crisis Festival – Unverkalt + Munarheim + Nekrodeus + Rană + Thorondir + Maerer + Amimia + Kalt + Skelfir + Aegror + Abyss of Hel + Maneater + Zeit + Dark Monument
-LOCATION:TV-Club\, Theresienstraße 2\, 04129 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-12-12-sachsenpunk-46-0943f78d-39d1-5978-b294-af3b47520b38@merged-leipzig-calendar
-DTSTART;TZID=Europe/Berlin:20261212T163000
-SUMMARY:Heavy Crisis Festival – Unverkalt + Munarheim + Nekrodeus + Rană + Thorondir + Maerer + Amimia + Kalt + Skelfir + Aegror + Abyss of Hel + Maneater + Zeit + Dark Monument
-LOCATION:TV-Club\, Theresienstraße 2\, 04129 Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
-END:VEVENT
-BEGIN:VEVENT
-UID:2026-12-12-sachsenpunk-47-95c53f4f-51b2-5165-bf37-3d8305dbbdc5@merged-leipzig-calendar
-DTSTART;VALUE=DATE:20261212
-DTEND;VALUE=DATE:20261213
-SUMMARY:Kampfgruppe winziges Chamaeleon mit riesigen Genitalien + Gülleschiss + Kleinstadtratten
-LOCATION:Axxxi\, Leipzig
-DESCRIPTION:Quelle: https://sachsenpunk.de/dates/
-URL:https://sachsenpunk.de/dates/
+DTEND;TZID=Europe/Berlin:20260908T213000
+SUMMARY:Solidarität im Minenfeld: Werden wir zu „Frenemies“? Antisemi
+ tismus und antimuslimischer Rassismus: Gemeinsamkeiten verstehen\, Differ
+ enzen aushalten
+LOCATION:Ost-Passage Theater Konradstraße 27\, Leipzig Rollstuhlgerecht? 
+ Nein
+URL:https://www.planlos-leipzig.org/events/solidaritaet-im-minenfeld-werde
+ n-wir-zu-frenemies-antisemitismus-und-antimuslimischer-rassismus-gemeinsa
+ mkeiten-verstehen-differenzen-aushalten/
 END:VEVENT
 END:VCALENDAR
