@@ -1,13 +1,5 @@
 #!/usr/bin/env python3
-"""
-Build events-leipzig.ics from PLANLOS and Sachsenpunk URL's.
-
-The PLANLOS site uses WordPress/Event Organiser. 
-
-First try its iCal feed, then fall back to HTML event pages if that doesn't work.
-
-Sachsenpunk is a plain date listing. We parse only Leipzig entries and enrich locations from the Sachsenpunk locations page and a small alias/address map.
-"""
+"""Build an iCalendar feed from PLANLOS Leipzig and Sachsenpunk Leipzig events."""
 
 from __future__ import annotations
 
@@ -15,7 +7,6 @@ import html
 import json
 import re
 import sys
-import time
 import uuid
 from datetime import datetime, timedelta
 from pathlib import Path
@@ -25,295 +16,429 @@ import requests
 from bs4 import BeautifulSoup
 from dateutil import tz
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "events-leipzig.ics"
-ALIASES = json.loads((ROOT / "locations.json").read_text(encoding="utf-8"))["aliases"]
+LOCATIONS_FILE = ROOT / "locations.json"
 
 PLANLOS = "https://www.planlos-leipzig.org"
-PLANLOS_FEEDS = [
+PLANLOS_FEEDS = (
     f"{PLANLOS}/events/feed/eo-events/?event_start_after=now",
     f"{PLANLOS}/feed/eo-events/?event_start_after=now",
-]
-PLANLOS_CALENDAR = f"{PLANLOS}/"
+)
 SACHSEN_DATES = "https://sachsenpunk.de/dates/"
-SACHSEN_LOCATIONS = "https://sachsenpunk.de/locations-gruppen-festivals/#locations"
 
-HEADERS = {
-    "User-Agent": "Events-Leipzig-Calendar/1.0 (+https://github.com/23KE74E6R347/events-leipzig-calendar)"
-}
-
-SESSION = requests.Session()
-SESSION.headers.update(HEADERS)
 BERLIN = tz.gettz("Europe/Berlin")
+SESSION = requests.Session()
+SESSION.headers.update({
+    "User-Agent": (
+        "Events-Leipzig-Calendar/1.0 "
+        "(+https://github.com/23KE74E6R347/events-leipzig-calendar)"
+    )
+})
+
+MONTHS = {
+    "Januar": 1, "Februar": 2, "März": 3, "April": 4,
+    "Mai": 5, "Juni": 6, "Juli": 7, "August": 8,
+    "September": 9, "Oktober": 10, "November": 11, "Dezember": 12,
+}
 
 
 def get(url: str, timeout: int = 30) -> requests.Response:
-    r = SESSION.get(url, timeout=timeout)
-    r.raise_for_status()
-    return r
+    response = SESSION.get(url, timeout=timeout)
+    response.raise_for_status()
+    return response
 
 
-def clean(s: str) -> str:
-    return re.sub(r"\s+", " ", html.unescape(s or "")).strip()
+def clean(value: str) -> str:
+    return re.sub(r"\s+", " ", html.unescape(value or "")).strip()
 
 
-def ical_unescape(s: str) -> str:
-    return (s.replace("\\n", "\n").replace("\\N", "\n")
-             .replace("\\,", ",").replace("\\;", ";").replace("\\\\", "\\"))
+def ical_unescape(value: str) -> str:
+    return (
+        value.replace("\\n", "\n")
+        .replace("\\N", "\n")
+        .replace("\\,", ",")
+        .replace("\\;", ";")
+        .replace("\\\\", "\\")
+    )
 
 
 def unfold_ics(text: str) -> list[str]:
-    out = []
+    lines = []
     for line in text.replace("\r\n", "\n").replace("\r", "\n").split("\n"):
-        if line.startswith((" ", "\t")) and out:
-            out[-1] += line[1:]
+        if line.startswith((" ", "\t")) and lines:
+            lines[-1] += line[1:]
         else:
-            out.append(line)
-    return out
+            lines.append(line)
+    return lines
 
 
-def parse_ics_dt(value: str, params: str = ""):
+def parse_ics_datetime(value: str, property_name: str = ""):
     value = value.strip()
-    if "VALUE=DATE" in params:
+
+    if "VALUE=DATE" in property_name:
         return datetime.strptime(value[:8], "%Y%m%d").replace(tzinfo=BERLIN), True
-    # UTC and local values handler
+
     if value.endswith("Z"):
-        return datetime.strptime(value[:-1], "%Y%m%dT%H%M%S").replace(tzinfo=tz.UTC).astimezone(BERLIN), False
+        return (
+            datetime.strptime(value[:-1], "%Y%m%dT%H%M%S")
+            .replace(tzinfo=tz.UTC)
+            .astimezone(BERLIN),
+            False,
+        )
+
     for fmt in ("%Y%m%dT%H%M%S", "%Y%m%dT%H%M"):
         try:
             return datetime.strptime(value, fmt).replace(tzinfo=BERLIN), False
         except ValueError:
             pass
+
     return None, False
 
 
 def parse_ics(text: str, source: str) -> list[dict]:
     events = []
     block = []
-    in_event = False
+    inside = False
+
     for line in unfold_ics(text):
         if line == "BEGIN:VEVENT":
-            in_event, block = True, []
-        elif line == "END:VEVENT":
-            if in_event:
-                fields = {}
-                for x in block:
-                    if ":" not in x:
-                        continue
-                    k, v = x.split(":", 1)
-                    fields.setdefault(k.split(";", 1)[0].upper(), []).append(v)
-                title = ical_unescape(fields.get("SUMMARY", [""])[0])
-                start_key = next((x for x in fields if x.startswith("DTSTART")), None)
-                if title and start_key:
-                    start, all_day = parse_ics_dt(fields[start_key][0], start_key)
-                    if start:
-                        end = None
-                        end_key = next((x for x in fields if x.startswith("DTEND")), None)
-                        if end_key:
-                            end, _ = parse_ics_dt(fields[end_key][0], end_key)
-                        events.append({
-                            "uid": fields.get("UID", [str(uuid.uuid4())])[0],
-                            "title": title,
-                            "start": start,
-                            "end": end,
-                            "all_day": all_day,
-                            "location": ical_unescape(fields.get("LOCATION", [""])[0]),
-                            "description": ical_unescape(fields.get("DESCRIPTION", [""])[0]),
-                            "url": fields.get("URL", [""])[0],
-                            "source": source,
-                        })
-            in_event = False
-        elif in_event:
+            inside = True
+            block = []
+            continue
+
+        if line == "END:VEVENT":
+            if not inside:
+                continue
+
+            fields: dict[str, list[str]] = {}
+            for item in block:
+                if ":" not in item:
+                    continue
+                key, value = item.split(":", 1)
+                fields.setdefault(key.upper(), []).append(value)
+
+            summary = ical_unescape(fields.get("SUMMARY", [""])[0])
+            start_key = next(
+                (key for key in fields if key.startswith("DTSTART")),
+                None,
+            )
+
+            if summary and start_key:
+                start, all_day = parse_ics_datetime(
+                    fields[start_key][0], start_key
+                )
+                if start:
+                    end = None
+                    end_key = next(
+                        (key for key in fields if key.startswith("DTEND")),
+                        None,
+                    )
+                    if end_key:
+                        end, _ = parse_ics_datetime(
+                            fields[end_key][0], end_key
+                        )
+
+                    events.append({
+                        "uid": fields.get("UID", [str(uuid.uuid4())])[0],
+                        "title": summary,
+                        "start": start,
+                        "end": end,
+                        "all_day": all_day,
+                        "location": ical_unescape(
+                            fields.get("LOCATION", [""])[0]
+                        ),
+                        "description": ical_unescape(
+                            fields.get("DESCRIPTION", [""])[0]
+                        ),
+                        "url": fields.get("URL", [""])[0],
+                        "source": source,
+                    })
+
+            inside = False
+            continue
+
+        if inside:
             block.append(line)
+
     return events
 
 
 def fetch_planlos_ics() -> list[dict]:
     for url in PLANLOS_FEEDS:
         try:
-            r = get(url)
-            if "BEGIN:VCALENDAR" in r.text and "VEVENT" in r.text:
-                return parse_ics(r.text, url)
-        except Exception as e:
-            print(f"PLANLOS ICS failed: {url}: {e}", file=sys.stderr)
+            response = get(url)
+            if "BEGIN:VCALENDAR" in response.text:
+                events = parse_ics(response.text, url)
+                if events:
+                    print(f"PLANLOS iCal: {len(events)}")
+                    return events
+        except Exception as exc:
+            print(f"PLANLOS iCal failed: {url}: {exc}", file=sys.stderr)
+
     return []
 
 
 def parse_planlos_html() -> list[dict]:
-
-"""
-Fallback: scrape event links from the calendar page and their detail pages
-"""
+    """Fallback parser for PLANLOS event pages."""
 
     events = []
-    seen = set()
+
     try:
-        page = get(PLANLOS_CALENDAR).text
-    except Exception as e:
-        print(f"PLANLOS HTML failed: {e}", file=sys.stderr)
+        page = get(PLANLOS).text
+    except Exception as exc:
+        print(f"PLANLOS HTML failed: {exc}", file=sys.stderr)
         return events
 
     soup = BeautifulSoup(page, "html.parser")
     links = []
-    for a in soup.find_all("a", href=True):
-        href = urljoin(PLANLOS, a["href"])
-        if "/events/" in href and href.rstrip("/") != PLANLOS.rstrip("/"):
-            links.append(href)
+
+    for anchor in soup.find_all("a", href=True):
+        url = urljoin(PLANLOS, anchor["href"])
+        if "/events/" in url:
+            links.append(url)
+
     for url in dict.fromkeys(links):
-        if url in seen:
-            continue
-        seen.add(url)
         try:
-            s = BeautifulSoup(get(url).text, "html.parser")
-            title = clean((s.find("h1") or s.title).get_text(" ", strip=True))
-            text = clean(s.get_text(" ", strip=True))
-            m = re.search(r"(?:Montag|Dienstag|Mittwoch|Donnerstag|Freitag|Samstag|Sonntag)\s*-\s*(\d{2}\.\d{2}\.\d{4})", text)
-            if not m:
-                m = re.search(r"(\d{2}\.\d{2}\.\d{4})", text)
-            if not m:
+            event_soup = BeautifulSoup(get(url).text, "html.parser")
+            title_node = event_soup.find("h1") or event_soup.find("title")
+            if not title_node:
                 continue
-            date = datetime.strptime(m.group(1), "%d.%m.%Y").replace(tzinfo=BERLIN)
-            tm = re.search(r"(\d{1,2}:\d{2})\s*(?:-\s*(\d{1,2}:\d{2}))?", text)
+
+            title = clean(title_node.get_text(" ", strip=True))
+            text = clean(event_soup.get_text(" ", strip=True))
+
+            date_match = re.search(r"\b(\d{2}\.\d{2}\.\d{4})\b", text)
+            if not date_match:
+                continue
+
+            date = datetime.strptime(
+                date_match.group(1), "%d.%m.%Y"
+            ).replace(tzinfo=BERLIN)
+
+            time_match = re.search(
+                r"\b(\d{1,2}):(\d{2})\b"
+                r"(?:\s*[-–]\s*(\d{1,2}):(\d{2}))?",
+                text,
+            )
+
             start = date
             end = None
-            if tm:
-                hh, mm = map(int, tm.group(1).split(":"))
-                start = date.replace(hour=hh, minute=mm)
-                if tm.group(2):
-                    eh, em = map(int, tm.group(2).split(":"))
-                    end = date.replace(hour=eh, minute=em)
-            # address: look for "Wo" and nearby text
-            loc = ""
-            h2 = next((h for h in s.find_all(["h2","h3"]) if clean(h.get_text()) == "Wo"), None)
-            if h2:
-                nxt = h2.find_next()
-                loc = clean(nxt.get_text(" ", strip=True)) if nxt else ""
-            if "Leipzig" not in loc and "leipzig" not in text.lower():
+
+            if time_match:
+                start = date.replace(
+                    hour=int(time_match.group(1)),
+                    minute=int(time_match.group(2)),
+                )
+                if time_match.group(3):
+                    end = date.replace(
+                        hour=int(time_match.group(3)),
+                        minute=int(time_match.group(4)),
+                    )
+
+            location = ""
+            for heading in event_soup.find_all(["h2", "h3"]):
+                if clean(heading.get_text()) == "Wo":
+                    node = heading.find_next()
+                    if node:
+                        location = clean(node.get_text(" ", strip=True))
+                    break
+
+            if "leipzig" not in text.lower():
                 continue
+
             events.append({
                 "uid": f"planlos-{uuid.uuid5(uuid.NAMESPACE_URL, url)}",
                 "title": title,
                 "start": start,
                 "end": end,
-                "all_day": tm is None,
-                "location": loc,
+                "all_day": time_match is None,
+                "location": location,
                 "description": "",
                 "url": url,
                 "source": url,
             })
-        except Exception as e:
-            print(f"PLANLOS event failed {url}: {e}", file=sys.stderr)
+
+        except Exception as exc:
+            print(f"PLANLOS event failed: {url}: {exc}", file=sys.stderr)
+
     return events
 
 
-def normalize_sachsen_location(raw: str) -> tuple[str, str]:
-    name = clean(raw)
-    address = ""
-    # exact aliases
-    for key, addr in ALIASES.items():
+def load_aliases() -> dict[str, str]:
+    if not LOCATIONS_FILE.exists():
+        return {}
+    try:
+        data = json.loads(LOCATIONS_FILE.read_text(encoding="utf-8"))
+        return data.get("aliases", {})
+    except Exception as exc:
+        print(f"Could not read locations.json: {exc}", file=sys.stderr)
+        return {}
+
+
+def normalize_location(name: str, aliases: dict[str, str]) -> tuple[str, str]:
+    name = clean(name)
+
+    for key, address in aliases.items():
         if name.casefold() == key.casefold():
-            return name, addr
-    # normalize variants
-    for key, addr in ALIASES.items():
+            return name, address
+
+    for key, address in aliases.items():
         if key.casefold() in name.casefold():
-            return name, addr
-    return name, address
+            return name, address
+
+    return name, ""
 
 
 def parse_sachsenpunk() -> list[dict]:
-    text = BeautifulSoup(get(SACHSEN_DATES).text, "html.parser").get_text("\n")
-    lines = [clean(x) for x in text.splitlines()]
+    soup = BeautifulSoup(get(SACHSEN_DATES).text, "html.parser")
+    lines = [clean(line) for line in soup.get_text("\n").splitlines()]
+
+    aliases = load_aliases()
     year = None
     month = None
     current_date = None
     events = []
-    month_names = {
-        "Januar":1,"Februar":2,"März":3,"April":4,"Mai":5,"Juni":6,
-        "Juli":7,"August":8,"September":9,"Oktober":10,"November":11,"Dezember":12
-    }
+
     for line in lines:
         if not line:
             continue
-        ym = re.search(r"(Januar|Februar|März|April|Mai|Juni|Juli|August|September|Oktober|November|Dezember)\s+(\d{4})", line)
-        if ym:
-            month, year = month_names[ym.group(1)], int(ym.group(2))
+
+        month_match = re.search(
+            r"(Januar|Februar|März|April|Mai|Juni|Juli|August|"
+            r"September|Oktober|November|Dezember)\s+(\d{4})",
+            line,
+        )
+
+        if month_match:
+            month = MONTHS[month_match.group(1)]
+            year = int(month_match.group(2))
             current_date = None
             continue
-        dm = re.match(r"^(\d{1,2})\.\d{2}\.\s*\(", line)
-        if dm and year:
-            # Sachsenpunk display date DD.MM.
-            current_date = datetime(year, month, int(dm.group(1)), tzinfo=BERLIN)
+
+        date_match = re.match(
+            r"^(\d{1,2})\.(?:\d{2}\.)?\s*\(",
+            line,
+        )
+
+        if date_match and year and month:
+            current_date = datetime(
+                year,
+                month,
+                int(date_match.group(1)),
+                tzinfo=BERLIN,
+            )
             continue
-        # omit the repeated month
-        dm2 = re.match(r"^(\d{1,2})\.\s*\(", line)
-        if dm2 and year and month:
-            current_date = datetime(year, month, int(dm2.group(1)), tzinfo=BERLIN)
-            continue
+
         if not current_date or not line.startswith("Leipzig"):
             continue
-        parts = [clean(p) for p in re.split(r"\s+–\s+", line, maxsplit=3)]
+
+        parts = [
+            clean(part)
+            for part in re.split(r"\s+–\s+", line, maxsplit=3)
+        ]
+
         if len(parts) < 3:
             continue
+
         city, venue, rest = parts[0], parts[1], parts[2]
+
         if city != "Leipzig":
             continue
-        tm = re.search(r"(\d{1,2}):(\d{2})\s*Uhr", rest)
+
+        time_match = re.search(r"(\d{1,2}):(\d{2})\s*Uhr", rest)
+
         start = current_date
-        if tm:
-            start = current_date.replace(hour=int(tm.group(1)), minute=int(tm.group(2)))
-        venue_name, address = normalize_sachsen_location(venue)
-        # strip time from title
-        title = re.sub(r"\s*–?\s*\d{1,2}:\d{2}\s*Uhr!?\s*–?\s*", "", rest, count=1)
+        if time_match:
+            start = current_date.replace(
+                hour=int(time_match.group(1)),
+                minute=int(time_match.group(2)),
+            )
+
+        venue_name, address = normalize_location(venue, aliases)
+
+        title = re.sub(
+            r"\s*[-–]?\s*\d{1,2}:\d{2}\s*Uhr!?\s*[-–]?\s*",
+            "",
+            rest,
+            count=1,
+        )
+
         events.append({
-            "uid": f"sachsenpunk-{uuid.uuid5(uuid.NAMESPACE_URL, line + current_date.isoformat())}",
+            "uid": (
+                "sachsenpunk-"
+                + str(uuid.uuid5(
+                    uuid.NAMESPACE_URL,
+                    line + current_date.isoformat(),
+                ))
+            ),
             "title": clean(title),
             "start": start,
             "end": None,
-            "all_day": tm is None,
-            "location": f"{venue_name}, {address}" if address else f"{venue_name}, Leipzig",
+            "all_day": time_match is None,
+            "location": (
+                f"{venue_name}, {address}"
+                if address
+                else f"{venue_name}, Leipzig"
+            ),
             "description": "Quelle: Sachsenpunk dates",
             "url": SACHSEN_DATES,
             "source": SACHSEN_DATES,
         })
+
+    print(f"SACHSENPUNK Leipzig: {len(events)}")
     return events
 
 
-def dedupe(events):
+def deduplicate(events: list[dict]) -> list[dict]:
     seen = set()
-    out = []
-    for e in events:
-        key = (e["title"].casefold(), e["start"].isoformat(), e["location"].casefold())
+    result = []
+
+    for event in events:
+        key = (
+            event["title"].casefold(),
+            event["start"].isoformat(),
+            event["location"].casefold(),
+        )
         if key not in seen:
             seen.add(key)
-            out.append(e)
-    return sorted(out, key=lambda e: (e["start"], e["title"].casefold()))
+            result.append(event)
+
+    return sorted(
+        result,
+        key=lambda event: (event["start"], event["title"].casefold()),
+    )
 
 
-def esc(v: str) -> str:
-    return (str(v).replace("\\", "\\\\").replace(";", "\\;")
-            .replace(",", "\\,").replace("\n", "\\n").replace("\r", ""))
+def ical_escape(value: str) -> str:
+    return (
+        str(value)
+        .replace("\\", "\\\\")
+        .replace(";", "\\;")
+        .replace(",", "\\,")
+        .replace("\r", "")
+        .replace("\n", "\\n")
+    )
 
 
-def fold_ical(line: str) -> str:
-    # RFC 5545 lines <= 75 octets for UTF-8 text
-    out = []
+def fold_line(line: str) -> str:
+    pieces = []
+
     while len(line.encode("utf-8")) > 74:
         cut = 74
         while len(line[:cut].encode("utf-8")) > 74:
             cut -= 1
-        out.append(line[:cut])
+        pieces.append(line[:cut])
         line = " " + line[cut:]
-    out.append(line)
-    return "\r\n".join(out)
+
+    pieces.append(line)
+    return "\r\n".join(pieces)
 
 
-def fmt_dt(dt):
-    return dt.strftime("%Y%m%dT%H%M%S")
-
-
-def make_ics(events):
+def make_ics(events: list[dict]) -> str:
     stamp = datetime.now(tz=BERLIN).strftime("%Y%m%dT%H%M%S")
-    out = [
+
+    lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
         "PRODID:-//23KE74E6R347//Events Leipzig Calendar//DE",
@@ -323,47 +448,84 @@ def make_ics(events):
         "X-WR-TIMEZONE:Europe/Berlin",
         f"DTSTAMP:{stamp}",
     ]
-    for e in events:
-        out.append("BEGIN:VEVENT")
-        out.append(f"UID:{esc(e['uid'])}")
-        if e["all_day"]:
-            out.append(f"DTSTART;VALUE=DATE:{e['start'].strftime('%Y%m%d')}")
-            if e.get("end"):
-                out.append(f"DTEND;VALUE=DATE:{e['end'].strftime('%Y%m%d')}")
+
+    for event in events:
+        lines.extend([
+            "BEGIN:VEVENT",
+            f"UID:{ical_escape(event['uid'])}",
+        ])
+
+        if event["all_day"]:
+            lines.append(
+                "DTSTART;VALUE=DATE:"
+                + event["start"].strftime("%Y%m%d")
+            )
         else:
-            out.append(f"DTSTART;TZID=Europe/Berlin:{fmt_dt(e['start'])}")
-            if e.get("end"):
-                out.append(f"DTEND;TZID=Europe/Berlin:{fmt_dt(e['end'])}")
-        out.append(f"SUMMARY:{esc(e['title'])}")
-        if e.get("location"):
-            out.append(f"LOCATION:{esc(e['location'])}")
-        if e.get("description"):
-            out.append(f"DESCRIPTION:{esc(e['description'])}")
-        if e.get("url"):
-            out.append(f"URL:{e['url']}")
-        out.append("END:VEVENT")
-    out.append("END:VCALENDAR")
-    return "\r\n".join(fold_ical(x) for x in out) + "\r\n"
+            lines.append(
+                "DTSTART;TZID=Europe/Berlin:"
+                + event["start"].strftime("%Y%m%dT%H%M%S")
+            )
+
+        if event.get("end"):
+            if event["all_day"]:
+                lines.append(
+                    "DTEND;VALUE=DATE:"
+                    + event["end"].strftime("%Y%m%d")
+                )
+            else:
+                lines.append(
+                    "DTEND;TZID=Europe/Berlin:"
+                    + event["end"].strftime("%Y%m%dT%H%M%S")
+                )
+
+        lines.append(f"SUMMARY:{ical_escape(event['title'])}")
+
+        if event.get("location"):
+            lines.append(
+                f"LOCATION:{ical_escape(event['location'])}"
+            )
+
+        if event.get("description"):
+            lines.append(
+                f"DESCRIPTION:{ical_escape(event['description'])}"
+            )
+
+        if event.get("url"):
+            lines.append(f"URL:{event['url']}")
+
+        lines.append("END:VEVENT")
+
+    lines.append("END:VCALENDAR")
+
+    return "\r\n".join(fold_line(line) for line in lines) + "\r\n"
 
 
-def main():
+def main() -> None:
     planlos = fetch_planlos_ics()
+
     if not planlos:
+        print("PLANLOS iCal unavailable; using HTML fallback.")
         planlos = parse_planlos_html()
 
-    sachsen = parse_sachsenpunk()
+    sachsenpunk = parse_sachsenpunk()
 
-    events = dedupe(planlos + sachsen)
-    # bind envents and remove stale items
+    events = deduplicate(planlos + sachsenpunk)
+
     cutoff = datetime.now(tz=BERLIN) - timedelta(days=2)
-    events = [e for e in events if e["start"] >= cutoff]
+    events = [
+        event for event in events
+        if event["start"] >= cutoff
+    ]
 
     if not events:
-        raise SystemExit("No events were parsed; refusing to overwrite the existing ICS.")
+        raise RuntimeError(
+            "No events were parsed; existing ICS was not overwritten."
+        )
 
     OUT.write_text(make_ics(events), encoding="utf-8")
-    print(f"PLANLOS: {len(planlos)}")
-    print(f"SACHSENPUNK Leipzig: {len(sachsen)}")
+
+    print(f"PLANLOS total: {len(planlos)}")
+    print(f"SACHSENPUNK Leipzig total: {len(sachsenpunk)}")
     print(f"TOTAL after dedupe/filter: {len(events)}")
     print(f"Wrote {OUT}")
 
