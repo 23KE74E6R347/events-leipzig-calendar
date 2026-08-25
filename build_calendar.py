@@ -1,19 +1,7 @@
 #!/usr/bin/env python3
-"""
-Build Events Leipzig Calendar.
-
-Sources:
-- PLANLOS Leipzig
-- Sachsenpunk, filtered to Leipzig
-
-The generated events-leipzig.ics is intended for GitHub Pages/iOS
-calendar subscriptions.
-"""
-
 from __future__ import annotations
 
 import html
-import json
 import re
 import sys
 import uuid
@@ -25,1263 +13,546 @@ import requests
 from bs4 import BeautifulSoup
 from dateutil import tz
 
-
-# ---------------------------------------------------------------------------
-# Configuration
-# ---------------------------------------------------------------------------
-
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "events-leipzig.ics"
-LOCATIONS_FILE = ROOT / "locations.json"
 
-PLANLOS = "https://www.planlos-leipzig.org"
-SACHSENPUNK = "https://sachsenpunk.de"
-SACHSEN_DATES = f"{SACHSENPUNK}/dates/"
-
+PLANLOS_URL = "https://www.planlos-leipzig.org/"
+SACHSENPUNK_URL = "https://sachsenpunk.de/dates/"
+LOCATIONS_URL = "https://sachsenpunk.de/locations-gruppen-festivals/#locations"
 BERLIN = tz.gettz("Europe/Berlin")
 
-# Do not publish obviously broken/incomplete scrapes.
-MIN_TOTAL_EVENTS = 80
-
-# Keep a small safety margin for temporary source problems.
-MIN_PLANLOS_EVENTS = 45
-MIN_SACHSENPUNK_EVENTS = 20
-
-SESSION = requests.Session()
-SESSION.headers.update(
-    {
-        "User-Agent": (
-            "Events-Leipzig-Calendar/1.0 "
-            "(+https://github.com/23KE74E6R347/events-leipzig-calendar)"
-        )
-    }
-)
+# These are safety floors, not expected exact totals.
+# A failed scrape must never replace the last good ICS.
+MIN_PLANLOS = 40
+MIN_SACHSENPUNK = 20
+MIN_TOTAL = 70
 
 MONTHS = {
-    "januar": 1,
-    "februar": 2,
-    "märz": 3,
-    "april": 4,
-    "mai": 5,
-    "juni": 6,
-    "juli": 7,
-    "august": 8,
-    "september": 9,
-    "oktober": 10,
-    "november": 11,
-    "dezember": 12,
+    "januar": 1, "februar": 2, "märz": 3, "april": 4,
+    "mai": 5, "juni": 6, "juli": 7, "august": 8,
+    "september": 9, "oktober": 10, "november": 11, "dezember": 12,
 }
 
-
-# ---------------------------------------------------------------------------
-# Generic helpers
-# ---------------------------------------------------------------------------
-
-def get(url: str, timeout: int = 30) -> requests.Response:
-    """GET a URL with a normal browser-like user agent."""
-    response = SESSION.get(url, timeout=timeout)
-    response.raise_for_status()
-    return response
-
-
-def clean(value: str) -> str:
-    """Normalize whitespace and HTML entities."""
-    return re.sub(r"\s+", " ", html.unescape(value or "")).strip()
-
-
-def normalize_dash(value: str) -> str:
-    """Normalize different Unicode dash characters."""
-    return (
-        value.replace("—", "–")
-        .replace("−", "–")
-        .replace("-", "–")
+S = requests.Session()
+S.headers.update({
+    "User-Agent": (
+        "Mozilla/5.0 (compatible; Events-Leipzig-Calendar/2.0; "
+        "+https://github.com/23KE74E6R347/events-leipzig-calendar)"
     )
+})
 
 
-def make_uid(source: str) -> str:
-    return str(uuid.uuid5(uuid.NAMESPACE_URL, source))
+def clean(s: str) -> str:
+    return re.sub(r"\s+", " ", html.unescape(s or "")).strip()
 
 
-# ---------------------------------------------------------------------------
-# Location handling
-# ---------------------------------------------------------------------------
+def uid(*parts: object) -> str:
+    return str(uuid.uuid5(uuid.NAMESPACE_URL, "|".join(map(str, parts))))
 
-def load_aliases() -> dict[str, str]:
-    if not LOCATIONS_FILE.exists():
-        return {}
 
-    try:
-        data = json.loads(
-            LOCATIONS_FILE.read_text(encoding="utf-8")
+def get(url: str) -> str:
+    r = S.get(url, timeout=30)
+    r.raise_for_status()
+    return r.text
+
+
+def dedupe(events: list[dict]) -> list[dict]:
+    seen = set()
+    out = []
+    for e in events:
+        key = (
+            e["title"].casefold(),
+            e["start"].isoformat(),
+            e["location"].casefold(),
         )
-        return data.get("aliases", {})
-    except Exception as exc:
-        print(
-            f"WARNING: could not read locations.json: {exc}",
-            file=sys.stderr,
-        )
-        return {}
-
-
-def normalize_location(
-    name: str,
-    aliases: dict[str, str],
-) -> tuple[str, str]:
-    """
-    Return (venue_name, address).
-
-    Exact aliases are preferred, followed by substring matches.
-    """
-    name = clean(name)
-
-    for key, address in aliases.items():
-        if name.casefold() == key.casefold():
-            return name, address
-
-    for key, address in aliases.items():
-        if key.casefold() in name.casefold():
-            return name, address
-
-    return name, ""
+        if key not in seen:
+            seen.add(key)
+            out.append(e)
+    return sorted(out, key=lambda x: (x["start"], x["title"].casefold()))
 
 
 # ---------------------------------------------------------------------------
 # PLANLOS
+#
+# The live page is a server-rendered calendar. Its structure is:
+#
+#   heading: "Di., 25. August 2026"
+#   event row: "19:00 - 23:15 | TITLE"
+#   location row: "Index, Leipzig"
+#
+# We therefore parse the rendered calendar rows rather than individual
+# event pages. This avoids the 429 problem from crawling dozens of pages.
 # ---------------------------------------------------------------------------
 
-def parse_ics_datetime(
-    value: str,
-    property_name: str = "",
-):
-    value = value.strip()
+PLANLOS_DATE = re.compile(
+    r"^(?:Mo|Di|Mi|Do|Fr|Sa|So)\.,\s+"
+    r"(\d{1,2})\.\s+"
+    r"(Januar|Februar|März|April|Mai|Juni|Juli|August|"
+    r"September|Oktober|November|Dezember)\s+(\d{4})$",
+    re.I,
+)
 
-    if "VALUE=DATE" in property_name:
-        return (
-            datetime.strptime(
-                value[:8],
-                "%Y%m%d",
-            ).replace(tzinfo=BERLIN),
-            True,
-        )
+PLANLOS_TIME = re.compile(
+    r"^(\d{1,2}):(\d{2})"
+    r"(?:\s*[-–]\s*(\d{1,2}):(\d{2}))?$"
+)
 
-    if value.endswith("Z"):
-        return (
-            datetime.strptime(
-                value[:-1],
-                "%Y%m%dT%H%M%S",
-            )
-            .replace(tzinfo=tz.UTC)
-            .astimezone(BERLIN),
-            False,
-        )
-
-    for fmt in (
-        "%Y%m%dT%H%M%S",
-        "%Y%m%dT%H%M",
-    ):
-        try:
-            return (
-                datetime.strptime(
-                    value,
-                    fmt,
-                ).replace(tzinfo=BERLIN),
-                False,
-            )
-        except ValueError:
-            pass
-
-    return None, False
+PLANLOS_RANGE = re.compile(
+    r"^(\d{1,2})\.(\d{1,2})\.(\d{4})"
+    r"\s*[-–]\s*"
+    r"(\d{1,2})\.(\d{1,2})\.(\d{4})$"
+)
 
 
-def unfold_ics(text: str) -> list[str]:
-    lines = []
+def parse_planlos() -> list[dict]:
+    soup = BeautifulSoup(get(PLANLOS_URL), "html.parser")
 
-    for line in (
-        text
-        .replace("\r\n", "\n")
-        .replace("\r", "\n")
-        .split("\n")
-    ):
-        if line.startswith((" ", "\t")) and lines:
-            lines[-1] += line[1:]
-        else:
-            lines.append(line)
-
-    return lines
-
-
-def ical_unescape(value: str) -> str:
-    return (
-        value
-        .replace("\\n", "\n")
-        .replace("\\N", "\n")
-        .replace("\\,", ",")
-        .replace("\\;", ";")
-        .replace("\\\\", "\\")
-    )
-
-
-def parse_ics(
-    text: str,
-    source: str,
-) -> list[dict]:
-    events = []
-    block = []
-    inside = False
-
-    for line in unfold_ics(text):
-
-        if line == "BEGIN:VEVENT":
-            inside = True
-            block = []
-            continue
-
-        if line == "END:VEVENT":
-
-            if not inside:
-                continue
-
-            fields: dict[str, list[str]] = {}
-
-            for item in block:
-
-                if ":" not in item:
-                    continue
-
-                key, value = item.split(":", 1)
-
-                fields.setdefault(
-                    key.upper(),
-                    [],
-                ).append(value)
-
-            summary = ical_unescape(
-                fields.get(
-                    "SUMMARY",
-                    [""],
-                )[0]
-            )
-
-            start_key = next(
-                (
-                    key
-                    for key in fields
-                    if key.startswith("DTSTART")
-                ),
-                None,
-            )
-
-            if summary and start_key:
-
-                start, all_day = parse_ics_datetime(
-                    fields[start_key][0],
-                    start_key,
-                )
-
-                if start:
-
-                    end = None
-
-                    end_key = next(
-                        (
-                            key
-                            for key in fields
-                            if key.startswith("DTEND")
-                        ),
-                        None,
-                    )
-
-                    if end_key:
-                        end, _ = parse_ics_datetime(
-                            fields[end_key][0],
-                            end_key,
-                        )
-
-                    events.append(
-                        {
-                            "uid": fields.get(
-                                "UID",
-                                [make_uid(
-                                    f"{source}|{summary}|{start}"
-                                )],
-                            )[0],
-                            "title": summary,
-                            "start": start,
-                            "end": end,
-                            "all_day": all_day,
-                            "location": ical_unescape(
-                                fields.get(
-                                    "LOCATION",
-                                    [""],
-                                )[0]
-                            ),
-                            "description": ical_unescape(
-                                fields.get(
-                                    "DESCRIPTION",
-                                    [""],
-                                )[0]
-                            ),
-                            "url": fields.get(
-                                "URL",
-                                [""],
-                            )[0],
-                            "source": source,
-                        }
-                    )
-
-            inside = False
-            continue
-
-        if inside:
-            block.append(line)
-
-    return events
-
-
-def fetch_planlos_ics() -> list[dict]:
-    """
-    Try the historical PLANLOS Event Organiser iCal endpoints.
-
-    They currently appear to return 404, so this is only a first attempt.
-    """
-    feeds = [
-        f"{PLANLOS}/events/feed/eo-events/",
-        f"{PLANLOS}/feed/eo-events/",
-        f"{PLANLOS}/events/feed/",
-    ]
-
-    for url in feeds:
-
-        try:
-            response = get(url)
-
-            if "BEGIN:VCALENDAR" not in response.text:
-                continue
-
-            events = parse_ics(
-                response.text,
-                url,
-            )
-
-            if events:
-                print(
-                    f"PLANLOS iCal: {len(events)} events"
-                )
-                return events
-
-        except Exception as exc:
-            print(
-                f"PLANLOS iCal failed: {url}: {exc}",
-                file=sys.stderr,
-            )
-
-    return []
-
-
-def parse_planlos_listing_page(
-    page_url: str,
-) -> list[dict]:
-    """
-    Parse a PLANLOS calendar/listing page.
-
-    The important part is that this parses the listing itself instead of
-    requesting every event page individually. This avoids PLANLOS HTTP 429s.
-    """
-
-    try:
-        response = get(page_url)
-    except Exception as exc:
-        print(
-            f"PLANLOS page failed: {page_url}: {exc}",
-            file=sys.stderr,
-        )
-        return []
-
-    soup = BeautifulSoup(
-        response.text,
-        "html.parser",
-    )
-
-    # Event Organiser / WordPress event listings often expose events
-    # as article/list-item elements. We first inspect semantic containers.
-    containers = soup.select(
-        "article, "
-        ".event, "
-        ".eo-event, "
-        ".eventorganiser-event, "
-        ".eo-events, "
-        ".eo-event-list"
-    )
-
-    candidates = containers if containers else soup.find_all("li")
+    # Preserve the visible line structure of the server-rendered page.
+    text = soup.get_text("\n", strip=True)
+    raw = [clean(x) for x in text.splitlines()]
+    lines = [x for x in raw if x]
 
     events = []
+    current_date = None
+    i = 0
 
-    date_re = re.compile(
-        r"(\d{1,2})\.(\d{1,2})\.(\d{4})"
-    )
+    while i < len(lines):
+        line = lines[i]
 
-    time_re = re.compile(
-        r"\b(\d{1,2}):(\d{2})\b"
-        r"(?:\s*[-–]\s*(\d{1,2}):(\d{2}))?"
-    )
-
-    for container in candidates:
-
-        text = clean(
-            container.get_text(
-                " ",
-                strip=True,
+        dm = PLANLOS_DATE.match(line)
+        if dm:
+            day = int(dm.group(1))
+            month = MONTHS[dm.group(2).casefold()]
+            year = int(dm.group(3))
+            current_date = datetime(
+                year, month, day, tzinfo=BERLIN
             )
-        )
-
-        if not text:
+            i += 1
             continue
 
-        date_match = date_re.search(text)
-
-        if not date_match:
+        if current_date is None:
+            i += 1
             continue
 
-        day = int(date_match.group(1))
-        month = int(date_match.group(2))
-        year = int(date_match.group(3))
+        # A PLANLOS event consists of:
+        #   time
+        #   title (often an <a>)
+        #   location
+        #
+        # Some all-day events additionally contain a date-range line.
+        tm = PLANLOS_TIME.match(line)
 
-        try:
-            date = datetime(
-                year,
-                month,
-                day,
-                tzinfo=BERLIN,
-            )
-        except ValueError:
-            continue
-
-        # Only accept Leipzig events.
-        if "leipzig" not in text.casefold():
-            continue
-
-        # Try semantic title elements first.
-        title = ""
-
-        title_node = container.select_one(
-            "h1, h2, h3, h4, "
-            ".event-title, "
-            ".eo-event-title, "
-            ".entry-title"
-        )
-
-        if title_node:
-            title = clean(
-                title_node.get_text(
-                    " ",
-                    strip=True,
-                )
-            )
-
-        # Otherwise try the event link text.
-        if not title:
-
-            for anchor in container.find_all(
-                "a",
-                href=True,
-            ):
-                anchor_text = clean(
-                    anchor.get_text(
-                        " ",
-                        strip=True,
-                    )
-                )
-
-                href = urljoin(
-                    PLANLOS,
-                    anchor["href"],
-                )
-
-                if (
-                    anchor_text
-                    and "/events/" in href
-                ):
-                    title = anchor_text
-                    break
-
-        if not title:
-            continue
-
-        time_match = time_re.search(text)
-
-        start = date
+        all_day = False
+        start = current_date
         end = None
-        all_day = True
+        title = None
+        location = None
 
-        if time_match:
-
-            hour = int(time_match.group(1))
-            minute = int(time_match.group(2))
-
-            if hour <= 23:
-
-                start = date.replace(
-                    hour=hour,
-                    minute=minute,
-                )
-
-                all_day = False
-
-                if time_match.group(3):
-
-                    end = date.replace(
-                        hour=int(
-                            time_match.group(3)
-                        ),
-                        minute=int(
-                            time_match.group(4)
-                        ),
-                    )
-
-        # Try to get a location from common semantic fields.
-        location = ""
-
-        location_node = container.select_one(
-            ".event-location, "
-            ".eo-event-location, "
-            ".location, "
-            "[class*='location']"
-        )
-
-        if location_node:
-            location = clean(
-                location_node.get_text(
-                    " ",
-                    strip=True,
-                )
+        if tm:
+            start = current_date.replace(
+                hour=int(tm.group(1)),
+                minute=int(tm.group(2)),
             )
+            if tm.group(3):
+                end = current_date.replace(
+                    hour=int(tm.group(3)),
+                    minute=int(tm.group(4)),
+                )
+            i += 1
 
-        # Do not use the entire container as location.
-        # If no dedicated location exists, leave it empty.
-        event_url = ""
+            # Skip a standalone date range if it appears after the time.
+            if i < len(lines) and PLANLOS_RANGE.match(lines[i]):
+                i += 1
 
-        for anchor in container.find_all(
-            "a",
-            href=True,
-        ):
-            href = urljoin(
-                PLANLOS,
-                anchor["href"],
-            )
+            if i < len(lines):
+                title = lines[i]
+                i += 1
+            if i < len(lines):
+                location = lines[i]
+                i += 1
 
-            if "/events/" in href:
-                event_url = href
+        elif line.casefold() == "ganztägig":
+            all_day = True
+            i += 1
+
+            if i >= len(lines):
                 break
 
-        uid_source = (
-            f"planlos|"
-            f"{title}|"
-            f"{start.isoformat()}|"
-            f"{location}|"
-            f"{event_url}"
-        )
+            range_match = PLANLOS_RANGE.match(lines[i])
+            if range_match:
+                a = datetime(
+                    int(range_match.group(3)),
+                    int(range_match.group(2)),
+                    int(range_match.group(1)),
+                    tzinfo=BERLIN,
+                )
+                b = datetime(
+                    int(range_match.group(6)),
+                    int(range_match.group(5)),
+                    int(range_match.group(4)),
+                    tzinfo=BERLIN,
+                )
+                start = a
+                end = b + timedelta(days=1)
+                i += 1
 
-        events.append(
-            {
-                "uid": (
-                    "planlos-"
-                    + make_uid(uid_source)
-                ),
-                "title": title,
-                "start": start,
-                "end": end,
-                "all_day": all_day,
-                "location": location,
-                "description": "",
-                "url": event_url,
-                "source": page_url,
-            }
-        )
+            if i < len(lines):
+                title = lines[i]
+                i += 1
+            if i < len(lines):
+                location = lines[i]
+                i += 1
 
-    return events
-
-
-def parse_planlos_html() -> list[dict]:
-    """
-    Crawl PLANLOS listing/calendar pages.
-
-    We deliberately do NOT request individual event pages.
-    """
-
-    pages = [
-        PLANLOS,
-        f"{PLANLOS}/test/",
-        f"{PLANLOS}/events/",
-    ]
-
-    events = []
-
-    for page in pages:
-
-        page_events = parse_planlos_listing_page(
-            page
-        )
-
-        print(
-            f"PLANLOS listing {page}: "
-            f"{len(page_events)} events"
-        )
-
-        events.extend(page_events)
-
-    events = deduplicate(events)
-
-    print(
-        f"PLANLOS listing total: "
-        f"{len(events)}"
-    )
-
-    return events
-
-
-# ---------------------------------------------------------------------------
-# Sachsenpunk
-# ---------------------------------------------------------------------------
-
-def parse_sachsenpunk() -> list[dict]:
-    """
-    Parse the Sachsenpunk /dates/ page.
-
-    Expected structure:
-
-    Leipzig – Venue – Event – 20 Uhr!
-    """
-
-    response = get(
-        SACHSEN_DATES
-    )
-
-    soup = BeautifulSoup(
-        response.text,
-        "html.parser",
-    )
-
-    lines = [
-        clean(line)
-        for line
-        in soup.get_text("\n").splitlines()
-    ]
-
-    lines = [
-        line
-        for line in lines
-        if line
-    ]
-
-    aliases = load_aliases()
-
-    events = []
-
-    current_year = None
-    current_month = None
-    current_date = None
-
-    month_re = re.compile(
-        r"(Januar|Februar|März|April|Mai|Juni|Juli|August|"
-        r"September|Oktober|November|Dezember)"
-        r"\s+(\d{4})",
-        re.IGNORECASE,
-    )
-
-    date_re = re.compile(
-        r"^(\d{1,2})\.(\d{2})\.\s*\("
-    )
-
-    for line in lines:
-
-        # Month/year heading
-        month_match = month_re.search(
-            line
-        )
-
-        if month_match:
-
-            month_name = month_match.group(
-                1
-            ).casefold()
-
-            current_month = MONTHS.get(
-                month_name
-            )
-
-            current_year = int(
-                month_match.group(2)
-            )
-
-            current_date = None
-
+        if not title or not location:
             continue
 
-        # Date heading
-        date_match = date_re.match(
-            line
+        # Leipzig filter. "Leipzig Neustadt..." and postal-code Leipzig
+        # locations are retained. Other cities such as Grimma are excluded.
+        if "leipzig" not in location.casefold():
+            continue
+
+        # Defensive check: avoid accidentally consuming the next date heading.
+        if PLANLOS_DATE.match(title) or PLANLOS_DATE.match(location):
+            continue
+
+        event_url = ""
+        # Find the title's actual link in the DOM where possible.
+        # The text parser above remains the source of truth for fields.
+        for a in soup.find_all("a", href=True):
+            if clean(a.get_text(" ", strip=True)) == title:
+                href = urljoin(PLANLOS_URL, a["href"])
+                if "/event" in href.casefold() or href.startswith(PLANLOS_URL):
+                    event_url = href
+                    break
+
+        events.append({
+            "uid": "planlos-" + uid(
+                title, start.isoformat(), location
+            ),
+            "title": title,
+            "start": start,
+            "end": end,
+            "all_day": all_day,
+            "location": location,
+            "description": "Quelle: PLANLOS Leipzig",
+            "url": event_url or PLANLOS_URL,
+            "source": "PLANLOS",
+        })
+
+    return dedupe(events)
+
+
+# ---------------------------------------------------------------------------
+# SACHSENPUNK
+#
+# The live page is a simple text calendar:
+#
+#   ———— August 2026 ————
+#   26.08. (Mi)
+#   Leipzig – Venue – 20 Uhr! – Band...
+#
+# Crucially, events can wrap over multiple HTML text lines. We therefore
+# continue consuming Leipzig lines until the next date heading.
+# ---------------------------------------------------------------------------
+
+SP_MONTH = re.compile(
+    r"^—+\s*(Januar|Februar|März|April|Mai|Juni|Juli|August|"
+    r"September|Oktober|November|Dezember)\s+(\d{4})\s*—+",
+    re.I,
+)
+
+SP_DATE = re.compile(
+    r"^(\d{1,2})\.(\d{1,2})\.\s*\([^)]+\)$"
+)
+
+SP_TIME = re.compile(
+    r"(?<!\d)(\d{1,2})(?::(\d{2}))?\s*Uhr!?",
+    re.I,
+)
+
+
+def split_sp_event(line: str) -> tuple[str, str, str] | None:
+    line = clean(line)
+    line = line.replace("—", "–").replace("−", "–")
+    if not line.casefold().startswith("leipzig"):
+        return None
+
+    rest = re.sub(r"^Leipzig\s*–\s*", "", line, flags=re.I)
+    parts = [clean(p) for p in re.split(r"\s*–\s*", rest) if clean(p)]
+    if len(parts) < 2:
+        return None
+
+    venue = parts[0]
+    remainder = " – ".join(parts[1:])
+
+    tm = SP_TIME.search(remainder)
+    hour = int(tm.group(1)) if tm else None
+    minute = int(tm.group(2) or 0) if tm else 0
+
+    if tm:
+        title = (
+            remainder[:tm.start()] + remainder[tm.end():]
         )
+        title = re.sub(r"^\s*–\s*", "", title)
+        title = re.sub(r"\s*–\s*$", "", title)
+        title = clean(title)
+    else:
+        title = clean(remainder)
 
-        if (
-            date_match
-            and current_year
-            and current_month
-        ):
+    return venue, title, (hour, minute) if hour is not None else None
 
-            day = int(
-                date_match.group(1)
-            )
 
-            # Sachsenpunk repeats the month number
-            # in the date heading.
-            month_number = int(
-                date_match.group(2)
-            )
+def load_location_map() -> dict[str, str]:
+    """
+    Build a venue -> URL map from the Sachsenpunk location directory.
 
-            if 1 <= month_number <= 12:
-                current_month = month_number
+    The directory itself provides the Leipzig venue names and links. We keep
+    the URL in the event description so an iOS user can follow it; we do not
+    make hundreds of external venue requests during every calendar build.
+    """
+    try:
+        soup = BeautifulSoup(get(LOCATIONS_URL), "html.parser")
+    except Exception as exc:
+        print(f"WARNING: locations page unavailable: {exc}", file=sys.stderr)
+        return {}
 
+    result = {}
+    for a in soup.find_all("a", href=True):
+        text = clean(a.get_text(" ", strip=True))
+        if not text.casefold().startswith("leipzig"):
+            continue
+        venue = re.sub(r"^Leipzig\s*[–-]\s*", "", text, flags=re.I)
+        venue = clean(venue)
+        if venue:
+            result[venue.casefold()] = urljoin(LOCATIONS_URL, a["href"])
+    return result
+
+
+def parse_sachsenpunk() -> list[dict]:
+    soup = BeautifulSoup(get(SACHSENPUNK_URL), "html.parser")
+    text = soup.get_text("\n", strip=True)
+    raw = [clean(x) for x in text.splitlines()]
+    lines = [x for x in raw if x]
+
+    location_urls = load_location_map()
+
+    events = []
+    year = None
+    month = None
+    current_date = None
+    current_event = None
+
+    def flush():
+        nonlocal current_event
+        if current_event:
+            events.append(current_event)
+            current_event = None
+
+    for line in lines:
+        mm = SP_MONTH.search(line)
+        if mm:
+            flush()
+            month = MONTHS[mm.group(1).casefold()]
+            year = int(mm.group(2))
+            current_date = None
+            continue
+
+        dm = SP_DATE.match(line)
+        if dm and year and month:
+            flush()
+            day = int(dm.group(1))
+            # The page's second numeric field is the month. Use it when
+            # available, because it protects against a missing month heading.
+            numeric_month = int(dm.group(2))
+            if 1 <= numeric_month <= 12:
+                month = numeric_month
             try:
                 current_date = datetime(
-                    current_year,
-                    current_month,
-                    day,
-                    tzinfo=BERLIN,
+                    year, month, day, tzinfo=BERLIN
                 )
             except ValueError:
                 current_date = None
-
             continue
 
-        if not current_date:
-            continue
+        parsed = split_sp_event(line)
+        if parsed and current_date:
+            flush()
+            venue, title, t = parsed
+            if not title:
+                continue
 
-        # Only Leipzig.
-        if not line.casefold().startswith(
-            "leipzig"
-        ):
-            continue
-
-        normalized = normalize_dash(
-            line
-        )
-
-        # Remove "Leipzig –"
-        payload = re.sub(
-            r"^Leipzig\s*–\s*",
-            "",
-            normalized,
-            flags=re.IGNORECASE,
-        )
-
-        # Sachsenpunk uses dashes as separators.
-        parts = [
-            clean(part)
-            for part
-            in re.split(
-                r"\s*–\s*",
-                payload,
-            )
-            if clean(part)
-        ]
-
-        if len(parts) < 2:
-            continue
-
-        venue = parts[0]
-
-        remainder = " – ".join(
-            parts[1:]
-        )
-
-        # Time can appear anywhere at the end,
-        # e.g. "20 Uhr!".
-        time_match = re.search(
-            r"(?<!\d)"
-            r"(\d{1,2})"
-            r"(?:[:.](\d{2}))?"
-            r"\s*Uhr!?"
-            r"\b",
-            remainder,
-            flags=re.IGNORECASE,
-        )
-
-        start = current_date
-        all_day = True
-
-        if time_match:
-
-            hour = int(
-                time_match.group(1)
-            )
-
-            minute = int(
-                time_match.group(2)
-                or 0
-            )
-
-            if hour <= 23:
-
+            if t:
                 start = current_date.replace(
-                    hour=hour,
-                    minute=minute,
+                    hour=t[0], minute=t[1]
                 )
-
                 all_day = False
+            else:
+                start = current_date
+                all_day = True
 
-        title = re.sub(
-            r"\s*[-–—]?\s*"
-            r"(?<!\d)"
-            r"\d{1,2}"
-            r"(?:[:.]\d{2})?"
-            r"\s*Uhr!?"
-            r"\b",
-            "",
-            remainder,
-            flags=re.IGNORECASE,
-        )
-
-        title = clean(
-            title
-        ).strip(
-            "–—- "
-        )
-
-        venue_name, address = (
-            normalize_location(
-                venue,
-                aliases,
-            )
-        )
-
-        if address:
-            location = (
-                f"{venue_name}, "
-                f"{address}"
-            )
-        else:
-            location = (
-                f"{venue_name}, Leipzig"
+            venue_url = (
+                location_urls.get(venue.casefold(), "")
             )
 
-        uid_source = (
-            f"sachsenpunk|"
-            f"{current_date.date()}|"
-            f"{venue_name}|"
-            f"{title}|"
-            f"{start.time()}"
-        )
-
-        events.append(
-            {
-                "uid": (
-                    "sachsenpunk-"
-                    + make_uid(uid_source)
+            current_event = {
+                "uid": "sachsenpunk-" + uid(
+                    start.date().isoformat(), venue, title
                 ),
                 "title": title,
                 "start": start,
                 "end": None,
                 "all_day": all_day,
-                "location": location,
+                "location": f"{venue}, Leipzig",
                 "description": (
-                    "Quelle: Sachsenpunk dates"
+                    "Quelle: Sachsenpunk. "
+                    + (f"Location: {venue_url}" if venue_url else "")
                 ),
-                "url": SACHSEN_DATES,
-                "source": SACHSEN_DATES,
+                "url": venue_url or SACHSENPUNK_URL,
+                "source": "Sachsenpunk",
             }
-        )
-
-    events = deduplicate(
-        events
-    )
-
-    print(
-        "SACHSENPUNK Leipzig: "
-        f"{len(events)}"
-    )
-
-    return events
-
-
-# ---------------------------------------------------------------------------
-# Deduplication
-# ---------------------------------------------------------------------------
-
-def deduplicate(
-    events: list[dict],
-) -> list[dict]:
-
-    seen = set()
-    result = []
-
-    for event in events:
-
-        key = (
-            event["title"]
-            .casefold(),
-            event["start"]
-            .isoformat(),
-            event["location"]
-            .casefold(),
-        )
-
-        if key in seen:
             continue
 
-        seen.add(key)
-        result.append(event)
+        # Wrapped continuation lines belong to the previous Sachsenpunk event.
+        # Do not absorb unrelated headings.
+        if current_event and not SP_MONTH.search(line) and not SP_DATE.match(line):
+            if not line.startswith(("SHOUTBOX", "DATES", "Date schicken")):
+                current_event["title"] = clean(
+                    current_event["title"] + " " + line
+                )
 
-    return sorted(
-        result,
-        key=lambda event: (
-            event["start"],
-            event["title"]
-            .casefold(),
-        ),
-    )
+    flush()
+    return dedupe(events)
 
 
 # ---------------------------------------------------------------------------
-# ICS generation
+# ICS
 # ---------------------------------------------------------------------------
 
-def ical_escape(
-    value: str,
-) -> str:
-
+def esc(s: str) -> str:
     return (
-        str(value)
-        .replace(
-            "\\",
-            "\\\\",
-        )
-        .replace(
-            ";",
-            "\\;",
-        )
-        .replace(
-            ",",
-            "\\,",
-        )
-        .replace(
-            "\r",
-            "",
-        )
-        .replace(
-            "\n",
-            "\\n",
-        )
+        str(s)
+        .replace("\\", "\\\\")
+        .replace(";", "\\;")
+        .replace(",", "\\,")
+        .replace("\r", "")
+        .replace("\n", "\\n")
     )
 
 
-def fold_ical_line(
-    line: str,
-) -> str:
-
-    pieces = []
-
-    while len(
-        line.encode("utf-8")
-    ) > 74:
-
-        cut = 74
-
-        while len(
-            line[:cut].encode("utf-8")
-        ) > 74:
-            cut -= 1
-
-        pieces.append(
-            line[:cut]
-        )
-
-        line = (
-            " "
-            + line[cut:]
-        )
-
-    pieces.append(line)
-
-    return "\r\n".join(
-        pieces
-    )
+def fold(line: str) -> str:
+    out = []
+    while len(line.encode("utf-8")) > 74:
+        n = 74
+        while len(line[:n].encode("utf-8")) > 74:
+            n -= 1
+        out.append(line[:n])
+        line = " " + line[n:]
+    out.append(line)
+    return "\r\n".join(out)
 
 
-def make_ics(
-    events: list[dict],
-) -> str:
-
-    timestamp = datetime.now(
-        tz=BERLIN
-    ).strftime(
-        "%Y%m%dT%H%M%S"
-    )
-
+def make_ics(events: list[dict]) -> str:
+    stamp = datetime.now(BERLIN).strftime("%Y%m%dT%H%M%S")
     lines = [
         "BEGIN:VCALENDAR",
         "VERSION:2.0",
-        (
-            "PRODID:"
-            "//23KE74E6R347"
-            "//Events Leipzig Calendar"
-            "//DE"
-        ),
+        "PRODID:-//23KE74E6R347//Events Leipzig Calendar//DE",
         "CALSCALE:GREGORIAN",
         "METHOD:PUBLISH",
-        (
-            "X-WR-CALNAME:"
-            "Events Leipzig Calendar"
-        ),
-        (
-            "X-WR-TIMEZONE:"
-            "Europe/Berlin"
-        ),
-        f"DTSTAMP:{timestamp}",
+        "X-WR-CALNAME:Events Leipzig Calendar",
+        "X-WR-TIMEZONE:Europe/Berlin",
+        f"DTSTAMP:{stamp}",
     ]
 
-    for event in events:
+    for e in events:
+        lines += [
+            "BEGIN:VEVENT",
+            f"UID:{esc(e['uid'])}",
+        ]
 
-        lines.extend(
-            [
-                "BEGIN:VEVENT",
-                (
-                    "UID:"
-                    + ical_escape(
-                        event["uid"]
-                    )
-                ),
-            ]
-        )
-
-        if event["all_day"]:
-
+        if e["all_day"]:
             lines.append(
-                (
-                    "DTSTART;VALUE=DATE:"
-                    + event["start"].strftime(
-                        "%Y%m%d"
-                    )
-                )
+                "DTSTART;VALUE=DATE:"
+                + e["start"].strftime("%Y%m%d")
             )
-
+            if e.get("end"):
+                lines.append(
+                    "DTEND;VALUE=DATE:"
+                    + e["end"].strftime("%Y%m%d")
+                )
         else:
-
             lines.append(
-                (
-                    "DTSTART;TZID="
-                    "Europe/Berlin:"
-                    + event["start"].strftime(
-                        "%Y%m%dT%H%M%S"
-                    )
-                )
+                "DTSTART;TZID=Europe/Berlin:"
+                + e["start"].strftime("%Y%m%dT%H%M%S")
             )
-
-        if event.get("end"):
-
-            if event["all_day"]:
-
+            if e.get("end"):
                 lines.append(
-                    (
-                        "DTEND;VALUE=DATE:"
-                        + event["end"].strftime(
-                            "%Y%m%d"
-                        )
-                    )
+                    "DTEND;TZID=Europe/Berlin:"
+                    + e["end"].strftime("%Y%m%dT%H%M%S")
                 )
 
-            else:
+        lines.append("SUMMARY:" + esc(e["title"]))
+        if e.get("location"):
+            lines.append("LOCATION:" + esc(e["location"]))
+        if e.get("description"):
+            lines.append("DESCRIPTION:" + esc(e["description"]))
+        if e.get("url"):
+            lines.append("URL:" + e["url"])
 
-                lines.append(
-                    (
-                        "DTEND;TZID="
-                        "Europe/Berlin:"
-                        + event["end"].strftime(
-                            "%Y%m%dT%H%M%S"
-                        )
-                    )
-                )
+        lines.append("END:VEVENT")
 
-        lines.append(
-            "SUMMARY:"
-            + ical_escape(
-                event["title"]
-            )
-        )
+    lines.append("END:VCALENDAR")
+    return "\r\n".join(fold(x) for x in lines) + "\r\n"
 
-        if event.get(
-            "location"
-        ):
-
-            lines.append(
-                "LOCATION:"
-                + ical_escape(
-                    event["location"]
-                )
-            )
-
-        if event.get(
-            "description"
-        ):
-
-            lines.append(
-                "DESCRIPTION:"
-                + ical_escape(
-                    event["description"]
-                )
-            )
-
-        if event.get(
-            "url"
-        ):
-
-            lines.append(
-                "URL:"
-                + event["url"]
-            )
-
-        lines.append(
-            "END:VEVENT"
-        )
-
-    lines.append(
-        "END:VCALENDAR"
-    )
-
-    return (
-        "\r\n".join(
-            fold_ical_line(line)
-            for line in lines
-        )
-        + "\r\n"
-    )
-
-
-# ---------------------------------------------------------------------------
-# Main
-# ---------------------------------------------------------------------------
 
 def main() -> None:
-
     print("=" * 70)
     print("Events Leipzig Calendar")
     print("=" * 70)
 
-    # PLANLOS
-    planlos = fetch_planlos_ics()
+    planlos = parse_planlos()
+    print(f"PLANLOS Leipzig: {len(planlos)}")
 
-    if not planlos:
-
-        print(
-            "PLANLOS iCal unavailable."
-        )
-
-        planlos = parse_planlos_html()
-
-    # Sachsenpunk
     sachsenpunk = parse_sachsenpunk()
+    print(f"Sachsenpunk Leipzig: {len(sachsenpunk)}")
 
-    # Combined
-    events = deduplicate(
-        planlos
-        + sachsenpunk
-    )
+    events = dedupe(planlos + sachsenpunk)
 
-    # Remove only clearly stale events.
-    # Keep today's events.
-    cutoff = (
-        datetime.now(
-            tz=BERLIN
-        )
-        - timedelta(
-            days=2
-        )
-    )
+    # Keep today's and future events. The source pages are current calendars,
+    # so there is no reason to retain old entries.
+    today = datetime.now(BERLIN).date()
+    events = [e for e in events if e["start"].date() >= today]
 
-    events = [
-        event
-        for event in events
-        if event["start"]
-        >= cutoff
-    ]
+    print(f"TOTAL future/current: {len(events)}")
 
-    print()
-    print(
-        f"PLANLOS: "
-        f"{len(planlos)}"
-    )
-
-    print(
-        f"SACHSENPUNK Leipzig: "
-        f"{len(sachsenpunk)}"
-    )
-
-    print(
-        f"TOTAL: "
-        f"{len(events)}"
-    )
-
-    print()
-
-    # ------------------------------------------------------------------
-    # Safety checks
-    # ------------------------------------------------------------------
-
-    if len(planlos) < MIN_PLANLOS_EVENTS:
-
+    # Safety rails. If either source suddenly breaks, do NOT publish a
+    # partial calendar over the last known-good version.
+    if len(planlos) < MIN_PLANLOS:
         raise RuntimeError(
-            "PLANLOS scrape looks incomplete: "
-            f"{len(planlos)} events found, "
-            f"minimum expected is "
-            f"{MIN_PLANLOS_EVENTS}. "
+            f"PLANLOS scrape incomplete: {len(planlos)} < {MIN_PLANLOS}. "
             "Existing ICS was NOT overwritten."
         )
 
-    if (
-        len(sachsenpunk)
-        < MIN_SACHSENPUNK_EVENTS
-    ):
-
+    if len(sachsenpunk) < MIN_SACHSENPUNK:
         raise RuntimeError(
-            "Sachsenpunk scrape looks incomplete: "
-            f"{len(sachsenpunk)} Leipzig events found, "
-            f"minimum expected is "
-            f"{MIN_SACHSENPUNK_EVENTS}. "
-            "Existing ICS was NOT overwritten."
+            f"Sachsenpunk scrape incomplete: {len(sachsenpunk)} < "
+            f"{MIN_SACHSENPUNK}. Existing ICS was NOT overwritten."
         )
 
-    if (
-        len(events)
-        < MIN_TOTAL_EVENTS
-    ):
-
+    if len(events) < MIN_TOTAL:
         raise RuntimeError(
-            "Combined scrape looks incomplete: "
-            f"{len(events)} events found, "
-            f"minimum expected is "
-            f"{MIN_TOTAL_EVENTS}. "
-            "Existing ICS was NOT overwritten."
+            f"Combined scrape suspiciously small: {len(events)} < "
+            f"{MIN_TOTAL}. Existing ICS was NOT overwritten."
         )
 
-    # ------------------------------------------------------------------
-    # Write only after all checks pass.
-    # ------------------------------------------------------------------
-
-    OUT.write_text(
-        make_ics(events),
-        encoding="utf-8",
-    )
-
-    print(
-        f"Successfully wrote: "
-        f"{OUT}"
-    )
-
-    print(
-        f"VEVENT count: "
-        f"{len(events)}"
-    )
+    OUT.write_text(make_ics(events), encoding="utf-8")
+    print(f"WROTE {OUT}")
+    print(f"VEVENTS: {len(events)}")
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        sys.exit(1)
