@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Events Leipzig Calendar</title>
+  <style>
+    :root { color-scheme: dark light; }
+    body { font-family: system-ui, sans-serif; max-width: 760px; margin: 0 auto; padding: 2rem 1.2rem; line-height: 1.5; }
+    code { overflow-wrap: anywhere; }
+    .card { padding: 1rem; border: 1px solid #8885; border-radius: 12px; margin: 1rem 0; }
+    a.button { display:inline-block; padding:.7rem 1rem; border-radius:9px; background:#444; color:white; text-decoration:none; }
+  </style>
+</head>
+<body>
+  <h1>Events Leipzig Calendar</h1>
+  <p>Upcoming PLANLOS + Sachsenpunk Events 4 Leipzig 🤝</p>
+
+  <div class="card">
+    <strong>🖤 Subscribe to calendar</strong>
+    <p><code id="url"></code></p>
+    <a class="button" id="download" href="events-leipzig.ics">💣️ Open ICS</a>
+  </div>
+
+  <div class="card">
+    <strong>Status</strong>
+    <p id="status">💤 Loading Calendarevents</p>
+  </div>
+
+  <script>
+    const icsUrl = new URL("events-leipzig.ics", location.href).href;
+    document.querySelector("#url").textContent = icsUrl;
+    document.querySelector("#download").href = icsUrl;
+
+    fetch("events-leipzig.ics", {cache: "no-store"})
+      .then(r => {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.text();
+      })
+      .then(t => {
+        const events = (t.match(/BEGIN:VEVENT/g) || []).length;
+        const stamp = (t.match(/^DTSTAMP:(.+)$/m) || [])[1] || "unknown";
+        document.querySelector("#status").textContent =
+          `${events} Termine · letzter Build: ${stamp}`;
+      })
+      .catch(e => {
+        document.querySelector("#status").textContent = "💀 Calendar could not be loaded: " + e;
+      });
+  </script>
+</body>
+</html>
